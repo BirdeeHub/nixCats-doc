@@ -1,4 +1,4 @@
-{ nixpkgs, nixCats, ... }@inputs: system: let
+{ nixpkgs, nixCats, mkdncss, ... }@inputs: system: let
   genvim = import ./genvim.nix inputs system;
   pkgs = import nixpkgs { inherit system; };
   helpPath = if builtins.pathExists "${nixCats}/nixCatsHelp" then "${nixCats}/nixCatsHelp" else "${nixCats}/nix/nixCatsHelp";
@@ -12,7 +12,7 @@
       ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]" --cmd "lua vim.g.nixCats_doc_src = [[$src]]"
       ${pkgs.pandoc}/bin/pandoc --standalone --template ${./github-markdown-dark.html} "$(realpath "${readmePath}")" -o $out/index.html -V title="NIX CATEGORIES FOR NVIM"
       ${pkgs.pandoc}/bin/pandoc --standalone --template ${./github-markdown-dark.html} "$(realpath "${./TOC.md}")" -o $out/TOC.html -V title="nixCats.org TOC"
-      cp ${./github-markdown-dark.css} $out/github-markdown-dark.css
+      cp ${mkdncss}/github-markdown-dark.css $out/github-markdown-dark.css
     '';
   };
 in
