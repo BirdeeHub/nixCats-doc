@@ -1,11 +1,11 @@
 { nixpkgs, nixCats, ... }@inputs: system: let
-  genvim = import ./. inputs system;
+  genvim = import ./genvim.nix inputs system;
   pkgs = import nixpkgs { inherit system; };
-  minFlake = if builtins.pathExists "${nixCats}/nixCatsHelp" then true else false;
-  readmePath = if minFlake then "${nixCats}/../README.md" else "${nixCats}/README.md";
+  helpPath = if builtins.pathExists "${nixCats}/nixCatsHelp" then "${nixCats}/nixCatsHelp" else "${nixCats}/nix/nixCatsHelp";
+  readmePath = if builtins.pathExists "${nixCats}/../README.md" then "${nixCats}/../README.md" else "${nixCats}/README.md";
   docsbuilt = pkgs.stdenv.mkDerivation {
     name = "genNixCatsDocs";
-    src = if minFlake then "${nixCats}/nixCatsHelp" else "${nixCats}/nix/nixCatsHelp";
+    src = helpPath;
     buildPhase = ''
       export HOME=$(mktemp -d)
       mkdir -p $out
@@ -18,6 +18,7 @@
 in
 pkgs.writeShellScriptBin "replaceNixCatsDocs" ''
   finaloutpath=''${1:-"."}
+  mkdir -p "$finaloutpath"
   cp -rf ${docsbuilt}/* "$finaloutpath"
   chmod +w $finaloutpath/*.html
   chmod +w $finaloutpath/*.css
