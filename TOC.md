@@ -22,4 +22,4 @@
 
 ## Source:
 - [main source of nixCats - github:BirdeeHub/nixCats-nvim](https://github.com/BirdeeHub/nixCats-nvim)
-- [source of nixcats.org - github:BirdeeHub/nixCats-doc](https://github.com/BirdeeHub/nixCats-doc)
+- [source of nixcats.org - github:BirdeeHub/nixCats-site-gen](https://github.com/BirdeeHub/nixCats-site-gen)
