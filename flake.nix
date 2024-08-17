@@ -1,6 +1,7 @@
 {
   description = ''
     Useage:
+    nix run --refresh --no-write-lock-file --show-trace .
     nix run --refresh --no-write-lock-file --show-trace . -- "$SOMEOUTPATH"
 
     generates an html + css site from the nixCats documentation
