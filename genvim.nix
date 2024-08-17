@@ -1,32 +1,30 @@
 { nixpkgs, nixCats, ... }: finalsystem: let
-  inherit (nixCats) utils;
-  luaPath = ./.;
-  extra_pkg_config = {};
-  dependencyOverlays = [ ];
-  categoryDefinitions = { pkgs, settings, categories, name, ... }@packageDef: {
+  categoryDefinitions = { pkgs, settings, categories, name, ... }: {
     startupPlugins = {
       general = with pkgs.vimPlugins; [
         onedark-nvim
-        # TODO: get it to properly do todo-comments-nvim without doing ALL grammars
-        # (nvim-treesitter.withPlugins ( plugins: with plugins; [ vimdoc nix lua bash ]))
-        nvim-treesitter.withAllGrammars
-        todo-comments-nvim
+        (nvim-treesitter.withPlugins ( plugins: with plugins; [
+          vimdoc
+          vim
+          luadoc
+          todotxt
+          nix
+          lua
+          bash
+        ]))
       ];
     };
   };
   packageDefinitions = {
     genvim = {pkgs , ... }: {
-      settings = {
-        wrapRc = true;
-      };
+      settings = {};
       categories = {
         general = true;
       };
     };
   };
-  defaultPackageName = "genvim";
 in
-utils.baseBuilder luaPath {
+nixCats.utils.baseBuilder ./. {
+  inherit nixpkgs;
   system = finalsystem;
-  inherit nixpkgs dependencyOverlays extra_pkg_config;
-} categoryDefinitions packageDefinitions defaultPackageName
+} categoryDefinitions packageDefinitions "genvim"

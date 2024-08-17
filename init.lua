@@ -5,8 +5,6 @@ require('onedark').setup {
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
 
-require("todo-comments").setup({ signs = false })
-
 local doc_out = vim.g.nixCats_doc_out
 local doc_src = vim.g.nixCats_doc_src
 
