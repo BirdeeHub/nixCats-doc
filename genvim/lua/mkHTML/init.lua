@@ -27,6 +27,7 @@ local tohtml = require('tohtml').tohtml
 ---@param doc_src string
 ---@return fun(target_filename:string, opts?:html_opts):htmlClass
 local function getConstructor(doc_src)
+    local fix_tags = require("mkHTML.fix_tags")(doc_src .. "/tags")
 
     ---@param target_filename string
     ---@param opts html_opts?
@@ -67,9 +68,7 @@ local function getConstructor(doc_src)
             end_body_index = getEndBdyInx(content),
             body_style = nil,
             get_content = function(self)
-                --TODO: call a fix ctags function
-                -- after deepcopy if you can make one maybe?
-                return vim.deepcopy(self.content)
+                return fix_tags(vim.deepcopy(self.content))
             end,
             fixBdyInx = function(self)
                 assert(self.content ~= {}, "error: empty contents")
