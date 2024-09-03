@@ -63,7 +63,11 @@ local function HTMLclass(target_filename, body_style)
         body_index = body_index,
         end_body_index = end_body_index,
         body_style = bodystyle,
-        get_content = function(self) return self.content end,
+        get_content = function(self)
+            --TODO: call a fix ctags function
+            -- here if you can make one maybe?
+            return vim.deepcopy(self.content)
+        end,
         fixBdyInx = function(self)
             assert(content ~= {}, "error: empty contents")
             self.body_index = getBdyInx(self.content)
