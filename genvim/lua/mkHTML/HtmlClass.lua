@@ -60,10 +60,10 @@ local function HTMLclass(target_filename, body_style)
     return vim.deepcopy({
         filename = target_filename,
         content = content,
-        get_content = function(self) return self.content end,
         body_index = body_index,
         end_body_index = end_body_index,
         body_style = bodystyle,
+        get_content = function(self) return self.content end,
         fixBdyInx = function(self)
             assert(content ~= {}, "error: empty contents")
             self.body_index = getBdyInx(self.content)
