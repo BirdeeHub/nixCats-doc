@@ -5,6 +5,7 @@ require('onedark').setup {
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
 
+local html_opts = { number_lines = true }
 local bodystyle = [[display: flex; flex-direction: column]]
 local linkLines = {
     [[<div style="text-align: center;">]],
@@ -43,7 +44,7 @@ local mkHTML = require('mkHTML')
 
 for _, name in ipairs(filetable) do
     local outfile = doc_out .. "/" .. name .. ".html"
-    converted[outfile] = mkHTML(name)
+    converted[outfile] = mkHTML(name, html_opts)
         :setBodyStyle(bodystyle)
         :insertManyHeads(linkLines)
         :insertManyTails(tailLines)

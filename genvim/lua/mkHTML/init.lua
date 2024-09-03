@@ -3,7 +3,7 @@ local tohtml = require('tohtml').tohtml
 
 ---@class htmlClass
 ---@field content string[]
----@field body_style string
+---@field body_style string?
 ---@field filename string
 ---@field body_index number
 ---@field end_body_index number
@@ -18,10 +18,16 @@ local tohtml = require('tohtml').tohtml
 ---
 ---@field get_content fun(self:htmlClass):string[]
 
+---@class html_opts
+---@field number_lines boolean
+---@field font string[]|string
+---@field width integer
+---@field range integer[]
+
 ---@param target_filename string
----@param body_style string?
+---@param opts html_opts?
 ---@return htmlClass
-local function HTMLclass(target_filename, body_style)
+local function HTMLclass(target_filename, opts)
     local function getHTMLlines(fname)
         assert(fname ~= nil and fname ~= "", "cannot get html lines without a filename")
 
@@ -31,16 +37,12 @@ local function HTMLclass(target_filename, body_style)
             vim.cmd.edit(srcpath)
         end)
         local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
-        local htmlopts = { title = fname, number_lines = true }
+        local htmlopts = vim.tbl_extend("force", opts or {}, { title = fname })
         return tohtml(win, htmlopts)
     end
     local function getBdyInx(filelines)
         for i, line in ipairs(filelines) do
             if line:find("<body.*>") then
-                if body_style then
-                    table.remove(filelines, i)
-                    table.insert(filelines, i, [[<body style="]] .. body_style .. [[">]])
-                end
                 return i
             end
         end
@@ -53,28 +55,25 @@ local function HTMLclass(target_filename, body_style)
         end
     end
     local content = getHTMLlines(target_filename)
-    local body_index = getBdyInx(content)
-    local end_body_index = getEndBdyInx(content)
-    local bodystyle = type(body_style) == "string" and body_style or ""
 
     return vim.deepcopy({
         filename = target_filename,
         content = content,
-        body_index = body_index,
-        end_body_index = end_body_index,
-        body_style = bodystyle,
+        body_index = getBdyInx(content),
+        end_body_index = getEndBdyInx(content),
+        body_style = nil,
         get_content = function(self)
             --TODO: call a fix ctags function
             -- here if you can make one maybe?
             return vim.deepcopy(self.content)
         end,
         fixBdyInx = function(self)
-            assert(content ~= {}, "error: empty contents")
+            assert(self.content ~= {}, "error: empty contents")
             self.body_index = getBdyInx(self.content)
             return self
         end,
         fixEndBdyInx = function(self)
-            assert(content ~= {}, "error: empty contents")
+            assert(self.content ~= {}, "error: empty contents")
             self.end_body_index = getEndBdyInx(self.content)
             return self
         end,
