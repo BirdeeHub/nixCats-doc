@@ -68,7 +68,7 @@ local function getConstructor(doc_src)
             end_body_index = getEndBdyInx(content),
             body_style = nil,
             get_content = function(self)
-                return fix_tags(vim.deepcopy(self.content))
+                return fix_tags(vim.deepcopy(self.content), self.filename)
             end,
             fixBdyInx = function(self)
                 assert(self.content ~= {}, "error: empty contents")
