@@ -38,8 +38,8 @@ local function gen_doc_file(filename)
     -- Find the first occurrence of "<pre>"
     local insert_index = nil
     for i, line in ipairs(filelines) do
-        if line:find("</head>") then
-            insert_index = i + 1
+        if line:find("<body[%s%S]*>") then
+            insert_index = i
             break
         end
     end
