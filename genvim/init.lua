@@ -5,6 +5,25 @@ require('onedark').setup {
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
 
+local bodystyle = [[display: flex; flex-direction: column]]
+local linkLines = {
+    [[<div style="text-align: center;">]],
+    [[<style>]],
+    [[a { color: #1a73e8; text-decoration: none; }]],
+    [[a:visited { color: #1a73e8; }]],
+    [[a:hover { color: #155ab6; text-decoration: underline; }]],
+    [[a:active { color: #003d99; }]],
+    [[</style>]],
+    [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
+    [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
+    [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
+    [[</div>]],
+    [[<div style="flex-direction: row">]],
+}
+local tailLines = {
+    "</div>",
+}
+
 local filetable = {
     "nixCats_installation",
     "nixCats_format",
@@ -24,7 +43,11 @@ local mkHTML = require('mkHTML')
 
 for _, name in ipairs(filetable) do
     local outfile = doc_out .. "/" .. name .. ".html"
-    converted[outfile] = mkHTML.gen_doc_file(name)
+    converted[outfile] = mkHTML(name)
+        :setBodyStyle(bodystyle)
+        :insertManyHeads(linkLines)
+        :insertManyTails(tailLines)
+        :get_content()
 end
 
 for output_file, lines in pairs(converted) do
