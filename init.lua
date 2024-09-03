@@ -7,19 +7,19 @@ vim.cmd.colorscheme('onedark')
 
 local doc_out = vim.g.nixCats_doc_out
 local doc_src = vim.g.nixCats_doc_src
+local tohtml = require('tohtml').tohtml
 
 local function gen_doc_file(filename)
     local srcpath = doc_src .. "/" .. filename .. ".txt"
-    local editcmd = vim.api.nvim_replace_termcodes(":e " .. srcpath .. "<cr>", true, false, true)
-    vim.api.nvim_feedkeys(editcmd, 'n', false)
-    vim.cmd('redraw')
-    vim.cmd('sleep 100m')
+    local buffer = vim.api.nvim_create_buf(true, false)
+    vim.api.nvim_buf_call(buffer, function()
+        vim.cmd.edit(srcpath)
+    end)
+    local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
+    local htmlopts = { title = filename, }
+    local file = tohtml(win, htmlopts)
 
-    local outpath = doc_out .. "/" .. filename .. ".html"
-    local gencmd = vim.api.nvim_replace_termcodes(":TOhtml " .. outpath .. "<cr>", true, false, true)
-    vim.api.nvim_feedkeys(gencmd, 'n', false)
-    vim.cmd('redraw')
-    vim.cmd('sleep 100m')
+    return file
 end
 
 local filetable = {
@@ -33,30 +33,28 @@ local filetable = {
     "nix_overlays",
 }
 
-for _, v in pairs(filetable) do
-    gen_doc_file(v)
+local converted = {}
+
+for _, name in pairs(filetable) do
+    local outfile = doc_out .. "/" .. name .. ".html"
+    converted[outfile] = gen_doc_file(name)
 end
 
--- wait for all that to finish:
-
-local uv = vim.loop
-
--- Start a new thread
--- otherwise it would block all the TOhtml stuff
-local function start_thread()
-  -- Create a new timer
-  local timer = uv.new_timer()
-
-  -- Wait for 10 seconds (10000 milliseconds), then close Neovim
-  timer:start(10000, 0, function()
-    timer:stop()
-    timer:close()
-    -- schedule it because you cant call this in a vim.loop space
-    vim.schedule(function()
-      vim.cmd('qa!')
-    end)
-  end)
+for output_file, lines in pairs(converted) do
+    local dirname = vim.fn.fnamemodify(output_file, ":p:h")
+    vim.fn.mkdir(dirname, "p")
+    local file = io.open(output_file, "w")
+    if file then
+        for _, line in ipairs(lines) do
+            file:write(line .. "\n")
+        end
+        file:close()
+        print("File written successfully to " .. output_file)
+    else
+        print("Error: Unable to open file " .. output_file)
+    end
 end
 
--- Run the thread
-start_thread()
+vim.schedule(function()
+    vim.cmd('qa!')
+end)
