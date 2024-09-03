@@ -68,7 +68,7 @@
       default = pkgs.writeShellScriptBin "replaceNixCatsDocs" ''
         finaloutpath=''${1:-"."}
         mkdir -p "$finaloutpath"
-        cp -rf ${docsite}/* "$finaloutpath"
+        cp -rvf ${docsite}/* "$finaloutpath"
         chmod +w $finaloutpath/*.html
         chmod +w $finaloutpath/*.css
       '';
