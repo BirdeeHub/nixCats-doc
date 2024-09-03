@@ -40,6 +40,7 @@
           genvim = {pkgs , ... }: {
             settings = {};
             categories = {
+              killAfter = true;
               general = true;
             };
           };
@@ -73,6 +74,18 @@
         chmod +w $finaloutpath/*.html
         chmod +w $finaloutpath/*.css
       '';
+
+      genvim = genvim.override (prev: {
+        packageDefinitions = {
+          genvim = args: {
+            settings = {};
+            categories = {
+              general = true;
+              killAfter = false;
+            };
+          };
+        };
+      });
     });
   };
 }

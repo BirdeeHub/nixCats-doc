@@ -42,6 +42,8 @@ for output_file, lines in pairs(converted) do
     end
 end
 
-vim.schedule(function()
-    vim.cmd('qa!')
-end)
+if nixCats('killAfter') then
+    vim.schedule(function()
+        vim.cmd('qa!')
+    end)
+end
