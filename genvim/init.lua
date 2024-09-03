@@ -35,9 +35,10 @@ for _, name in ipairs(filetable) do
             [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
             [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
             [[</div>]],
-            [[<div style="flex-direction: row">]],
+            -- NOTE: flex-row was the default before we overrode things.
+            [[<div style="display: flex; flex-direction: row">]],
         }):insertManyTails({
-            "</div>",
+            [[</div>]],
         }):get_content(false)
 
     local ok, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)

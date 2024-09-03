@@ -57,6 +57,9 @@ local function getConstructor(doc_src)
             return tohtml(win, htmlopts)
         end
         local function getBdyInx(filelines)
+            if #filelines == 0 then
+                return nil
+            end
             for i, line in ipairs(filelines) do
                 if line:find("<body.*>") then
                     return i
@@ -64,6 +67,9 @@ local function getConstructor(doc_src)
             end
         end
         local function getEndBdyInx(filelines)
+            if #filelines == 0 then
+                return nil
+            end
             for i = #filelines, 1, -1 do
                 if filelines[i]:find("</body>") then
                     return i
