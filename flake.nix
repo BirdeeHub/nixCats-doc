@@ -50,11 +50,12 @@
       } categoryDefinitions packageDefinitions "genvim";
 
       pkgs = import nixpkgs { inherit system; };
+      isNixDir = builtins.pathExists "${nixCats}/nixCatsHelp";
       docsite = pkgs.stdenv.mkDerivation {
         name = "genNixCatsDocs";
-        src = if builtins.pathExists "${nixCats}/nixCatsHelp" then "${nixCats}/nixCatsHelp" else "${nixCats}/nix/nixCatsHelp";
+        src = if isNixDir then "${nixCats}/nixCatsHelp" else "${nixCats}/nix/nixCatsHelp";
         buildPhase = let
-          readmePath = if builtins.pathExists "${nixCats}/../README.md" then "${nixCats}/../README.md" else "${nixCats}/README.md";
+          readmePath = if isNixDir then "${nixCats}/../README.md" else "${nixCats}/README.md";
         in /* bash */ ''
           export HOME=$(mktemp -d)
           mkdir -p $out
