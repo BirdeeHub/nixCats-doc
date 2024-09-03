@@ -39,8 +39,9 @@ local filetable = {
 local converted = {}
 
 local doc_out = vim.g.nixCats_doc_out
+local doc_src = vim.g.nixCats_doc_src
 
-local mkHTML = require('mkHTML')
+local mkHTML = require('mkHTML')(doc_src)
 
 for _, name in ipairs(filetable) do
     local outfile = doc_out .. "/" .. name .. ".html"
