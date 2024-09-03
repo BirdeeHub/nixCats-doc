@@ -9,6 +9,16 @@ local doc_out = vim.g.nixCats_doc_out
 local doc_src = vim.g.nixCats_doc_src
 local tohtml = require('tohtml').tohtml
 
+local linkLines = {
+    [[<body style="display: flex; flex-direction: column">]],
+    [[<div style="text-align: center;">]],
+    [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
+    [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
+    [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
+    [[</div>]],
+    [[<div style="flex-direction: row">]],
+}
+
 local function gen_doc_file(filename)
     local srcpath = doc_src .. "/" .. filename .. ".txt"
     local buffer = vim.api.nvim_create_buf(true, false)
@@ -17,9 +27,41 @@ local function gen_doc_file(filename)
     end)
     local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
     local htmlopts = { title = filename, }
-    local file = tohtml(win, htmlopts)
+    local filelines = tohtml(win, htmlopts)
 
-    return file
+    -- Find the first occurrence of "<pre>"
+    local insert_index = nil
+    for i, line in ipairs(filelines) do
+        if line:find("</head>") then
+            insert_index = i + 1
+            break
+        end
+    end
+
+
+    -- If "</head>" was found, remove <body ...> line so we can make a header
+    if insert_index then
+        table.remove(filelines, insert_index)
+        for i = #linkLines, 1, -1 do
+            table.insert(filelines, insert_index, linkLines[i])
+        end
+    end
+
+    -- Find the last occurrence of "</body>" and insert a line before it
+    local last_body_index = nil
+    for i = #filelines, 1, -1 do
+        if filelines[i]:find("</body>") then
+            last_body_index = i
+            break
+        end
+    end
+
+    -- Insert a line before the last "</body>"
+    if last_body_index then
+        table.insert(filelines, last_body_index, "</div>")
+    end
+
+    return filelines
 end
 
 local filetable = {
