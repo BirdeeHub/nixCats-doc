@@ -45,7 +45,7 @@
           };
         };
       in
-      nixCats.utils.baseBuilder ./. {
+      nixCats.utils.baseBuilder ./genvim {
         inherit nixpkgs system;
       } categoryDefinitions packageDefinitions "genvim";
 
@@ -59,8 +59,8 @@
           export HOME=$(mktemp -d)
           mkdir -p $out
           ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[$src]]"
-          ${pkgs.pandoc}/bin/pandoc --standalone --template ${./github-markdown-dark.html} "$(realpath "${readmePath}")" -o $out/index.html -V title="NIX CATEGORIES FOR NVIM"
-          ${pkgs.pandoc}/bin/pandoc --standalone --template ${./github-markdown-dark.html} "$(realpath "${./TOC.md}")" -o $out/TOC.html -V title="nixCats.org TOC"
+          ${pkgs.pandoc}/bin/pandoc --standalone --template ${./md/github-markdown-dark.html} "$(realpath "${readmePath}")" -o $out/index.html -V title="NIX CATEGORIES FOR NVIM"
+          ${pkgs.pandoc}/bin/pandoc --standalone --template ${./md/github-markdown-dark.html} "$(realpath "${./md/TOC.md}")" -o $out/TOC.html -V title="nixCats.org TOC"
           cp ${mkdncss}/github-markdown-dark.css $out/github-markdown-dark.css
         '';
       };
