@@ -26,6 +26,7 @@ local tohtml = require('tohtml').tohtml
 
 ---@param doc_src string
 ---@return fun(target_filename:string, opts?:html_opts):htmlClass
+---@return fun(output_file:string,lines:string[]):boolean,string
 local function getConstructor(doc_src)
     local fix_tags = require("mkHTML.fix_tags")(doc_src .. "/tags")
 
@@ -110,7 +111,22 @@ local function getConstructor(doc_src)
         })
     end
 
-    return HTMLclass
+    local writeToFile = function(output_file, lines)
+        local dirname = vim.fn.fnamemodify(output_file, ":p:h")
+        vim.fn.mkdir(dirname, "p")
+        local file = io.open(output_file, "w")
+        if file then
+            for _, line in ipairs(lines) do
+                file:write(line .. "\n")
+            end
+            file:close()
+            return true, "File written successfully to " .. output_file
+        else
+            return false, "Error: Unable to open file " .. output_file
+        end
+    end
+
+    return HTMLclass, writeToFile
 end
 
 return getConstructor
