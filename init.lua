@@ -32,39 +32,32 @@ local function gen_doc_file(filename)
         vim.cmd.edit(srcpath)
     end)
     local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
-    local htmlopts = { title = filename, }
+    local htmlopts = { title = filename, number_lines = true }
     local filelines = tohtml(win, htmlopts)
 
-    -- Find the first occurrence of "<pre>"
-    local insert_index = nil
+    -- add navigation header
+    local body_index = nil
     for i, line in ipairs(filelines) do
         if line:find("<body.*>") then
-            insert_index = i
+            body_index = i
             break
         end
     end
-
-
-    -- If "</head>" was found, remove <body ...> line so we can make a header
-    if insert_index then
-        table.remove(filelines, insert_index)
+    if body_index then
+        table.remove(filelines, body_index)
         for i = #linkLines, 1, -1 do
-            table.insert(filelines, insert_index, linkLines[i])
+            table.insert(filelines, body_index, linkLines[i])
         end
     end
-
-    -- Find the last occurrence of "</body>" and insert a line before it
-    local last_body_index = nil
+    local end_body_index = nil
     for i = #filelines, 1, -1 do
         if filelines[i]:find("</body>") then
-            last_body_index = i
+            end_body_index = i
             break
         end
     end
-
-    -- Insert a line before the last "</body>"
-    if last_body_index then
-        table.insert(filelines, last_body_index, "</div>")
+    if end_body_index then
+        table.insert(filelines, end_body_index, "</div>")
     end
 
     return filelines
