@@ -16,7 +16,7 @@ local linkLines = {
     [[a { color: #1a73e8; text-decoration: none; }]],
     [[a:visited { color: #1a73e8; }]],
     [[a:hover { color: #155ab6; text-decoration: underline; }]],
-    [[a:active { color: #003d99; };]],
+    [[a:active { color: #003d99; }]],
     [[</style>]],
     [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
     [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
