@@ -1,29 +1,7 @@
-require('onedark').setup {
-    -- Set a style preset. 'dark' is default.
-    style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
-}
+-- dark, darker, cool, deep, warm, warmer, light
+require('onedark').setup { style = 'dark', }
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
-
-local html_opts = { number_lines = true }
-local bodystyle = [[display: flex; flex-direction: column]]
-local linkLines = {
-    [[<div style="text-align: center;">]],
-    [[<style>]],
-    [[a { color: #1a73e8; text-decoration: none; }]],
-    [[a:visited { color: #1a73e8; }]],
-    [[a:hover { color: #155ab6; text-decoration: underline; }]],
-    [[a:active { color: #003d99; }]],
-    [[</style>]],
-    [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
-    [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
-    [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
-    [[</div>]],
-    [[<div style="flex-direction: row">]],
-}
-local tailLines = {
-    "</div>",
-}
 
 local filetable = {
     "nixCats_installation",
@@ -43,14 +21,30 @@ local HTML, writeToFile = require('mkHTML')(doc_src)
 ---@cast HTML htmlCONSTRUCTOR
 
 for _, name in ipairs(filetable) do
-    local outfile = doc_out .. "/" .. name .. ".html"
-    local converted = HTML(name, html_opts)
-        :setBodyStyle(bodystyle)
-        :insertManyHeads(linkLines)
-        :insertManyTails(tailLines)
-        :get_content(false)
-    local ok, msg = writeToFile(outfile, converted)
+    local converted = HTML(name, { number_lines = true })
+        :setBodyStyle([[display: flex; flex-direction: column]])
+        :insertManyHeads({
+            [[<div style="text-align: center;">]],
+            [[<style>]],
+            [[a { color: #1a73e8; text-decoration: none; }]],
+            [[a:visited { color: #1a73e8; }]],
+            [[a:hover { color: #155ab6; text-decoration: underline; }]],
+            [[a:active { color: #003d99; }]],
+            [[</style>]],
+            [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
+            [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
+            [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
+            [[</div>]],
+            [[<div style="flex-direction: row">]],
+        }):insertManyTails({
+            "</div>",
+        }):get_content(false)
+
+    local ok, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
     print(msg)
+    if not ok and nixCats("killAfter") then
+        vim.cmd.cquit("1")
+    end
 end
 
 if nixCats('killAfter') then
