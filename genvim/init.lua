@@ -40,6 +40,7 @@ local doc_out = vim.g.nixCats_doc_out
 local doc_src = vim.g.nixCats_doc_src
 
 local HTML, writeToFile = require('mkHTML')(doc_src)
+---@cast HTML htmlCONSTRUCTOR
 
 for _, name in ipairs(filetable) do
     local outfile = doc_out .. "/" .. name .. ".html"
@@ -47,7 +48,7 @@ for _, name in ipairs(filetable) do
         :setBodyStyle(bodystyle)
         :insertManyHeads(linkLines)
         :insertManyTails(tailLines)
-        :get_content()
+        :get_content(false)
     local ok, msg = writeToFile(outfile, converted)
     print(msg)
 end

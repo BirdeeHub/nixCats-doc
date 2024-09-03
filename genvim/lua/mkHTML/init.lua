@@ -14,7 +14,17 @@
 ---@field insertManyHeads fun(self:htmlClass, lines:string[]):htmlClass
 ---@field insertManyTails fun(self:htmlClass, lines:string[]):htmlClass
 ---
----@field get_content fun(self:htmlClass):string[]
+---new_tag_root should be a string
+---OR false for relative path
+---OR nil to not fix tags
+---@field get_content fun(self:htmlClass,new_tag_root?:string|false):string[]
+
+---HTML(filename):setBodyStyle(styleString)
+---:insertHead(head):insertTail(tail)
+---:insertManyHeads(headlist):insertManyTails(endlist)
+---:get_content(new_tag_root)
+---head and tail are at beginning and end of BODY
+---@alias htmlCONSTRUCTOR fun(target_filename:string, opts?:html_opts):htmlClass
 
 ---@class html_opts
 ---@field number_lines boolean
@@ -33,7 +43,7 @@ local function getConstructor(doc_src)
     ---@param target_filename string
     ---@param opts html_opts?
     ---@return htmlClass
-    local function HTMLclass(target_filename, opts)
+    local function HTML(target_filename, opts)
         local function getHTMLlines(fname)
             assert(fname ~= nil and fname ~= "", "cannot get html lines without a filename")
 
@@ -68,8 +78,14 @@ local function getConstructor(doc_src)
             body_index = getBdyInx(content),
             end_body_index = getEndBdyInx(content),
             body_style = nil,
-            get_content = function(self)
-                return fix_tags(vim.deepcopy(self.content), self.filename)
+            get_content = function(self, new_tag_root)
+                if new_tag_root then
+                    return fix_tags(vim.deepcopy(self.content), self.filename, new_tag_root)
+                elseif new_tag_root == false then
+                    return fix_tags(vim.deepcopy(self.content), self.filename, false)
+                else
+                    return vim.deepcopy(self.content)
+                end
             end,
             fixBdyInx = function(self)
                 assert(self.content ~= {}, "error: empty contents")
@@ -126,7 +142,8 @@ local function getConstructor(doc_src)
         end
     end
 
-    return HTMLclass, writeToFile
+    ---@cast HTML htmlCONSTRUCTOR
+    return HTML, writeToFile
 end
 
 return getConstructor
