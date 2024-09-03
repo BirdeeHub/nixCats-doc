@@ -2,6 +2,7 @@ local doc_src = vim.g.nixCats_doc_src
 local tohtml = require('tohtml').tohtml
 
 ---@class htmlClass
+---NOTE: private fields, do not set directly!
 ---@field content string[]
 ---@field body_style string?
 ---@field filename string
