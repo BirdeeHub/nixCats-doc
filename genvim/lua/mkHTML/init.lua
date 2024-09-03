@@ -64,7 +64,7 @@ local function HTMLclass(target_filename, opts)
         body_style = nil,
         get_content = function(self)
             --TODO: call a fix ctags function
-            -- here if you can make one maybe?
+            -- after deepcopy if you can make one maybe?
             return vim.deepcopy(self.content)
         end,
         fixBdyInx = function(self)
