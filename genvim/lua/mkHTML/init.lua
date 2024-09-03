@@ -45,7 +45,7 @@ local function getConstructor(doc_src)
     ---@return htmlClass
     local function HTML(target_filename, opts)
         local function getHTMLlines(fname)
-            assert(fname ~= nil and fname ~= "", "cannot get html lines without a filename")
+            my_assert(fname ~= nil and fname ~= "", "cannot get html lines without a filename")
 
             local srcpath = doc_src .. "/" .. fname .. ".txt"
             local buffer = vim.api.nvim_create_buf(true, false)
@@ -94,22 +94,25 @@ local function getConstructor(doc_src)
                 end
             end,
             fixBdyInx = function(self)
-                assert(self.content ~= {}, "error: empty contents")
+                my_assert(type(self.content) == "table" and self.content ~= {}, "error: empty contents")
                 self.body_index = getBdyInx(self.content)
                 return self
             end,
             fixEndBdyInx = function(self)
-                assert(self.content ~= {}, "error: empty contents")
+                my_assert(type(self.content) == "table" and self.content ~= {}, "error: empty contents")
                 self.end_body_index = getEndBdyInx(self.content)
                 return self
             end,
             setBodyStyle = function(self, style)
+                my_assert(type(self.body_index) == "number", "error: empty contents")
                 self.body_style = style
                 table.remove(self.content, self.body_index)
                 table.insert(self.content, self.body_index, [[<body style="]] .. style .. [[">]])
                 return self
             end,
             insertHead = function(self, line)
+                my_assert(type(self.body_index) == "number", "error: empty contents")
+                my_assert(type(self.end_body_index) == "number", "error: empty contents")
                 table.insert(self.content, self.body_index + 1, line)
                 self.end_body_index = self.end_body_index + 1
                 return self
@@ -121,6 +124,8 @@ local function getConstructor(doc_src)
                 return self
             end,
             insertTail = function(self, line)
+                my_assert(type(self.body_index) == "number", "error: empty contents")
+                my_assert(type(self.end_body_index) == "number", "error: empty contents")
                 table.insert(self.content, self.end_body_index, line)
                 return self
             end,

@@ -3,6 +3,13 @@ require('onedark').setup { style = 'dark', }
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
 
+_G.my_assert = function(c, message)
+    if not c then
+        print("assertion failed: " .. message)
+        vim.cmd.cquit("1")
+    end
+end
+
 local filetable = {
     "nixCats_installation",
     "nixCats_format",
