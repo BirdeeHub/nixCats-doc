@@ -19,7 +19,7 @@ local linkLines = {
     [[<div style="flex-direction: row">]],
 }
 
-function M.gen_doc_file(filename)
+local function getHTMLlines(filename)
     local srcpath = doc_src .. "/" .. filename .. ".txt"
     local buffer = vim.api.nvim_create_buf(true, false)
     vim.api.nvim_buf_call(buffer, function()
@@ -27,9 +27,11 @@ function M.gen_doc_file(filename)
     end)
     local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
     local htmlopts = { title = filename, number_lines = true }
-    local filelines = tohtml(win, htmlopts)
+    return tohtml(win, htmlopts)
+end
 
-    -- add navigation header
+local function addNavHeader(filelines)
+
     local body_index = nil
     for i, line in ipairs(filelines) do
         if line:find("<body.*>") then
@@ -53,6 +55,14 @@ function M.gen_doc_file(filename)
     if end_body_index then
         table.insert(filelines, end_body_index, "</div>")
     end
+    
+    return filelines
+end
+
+function M.gen_doc_file(filename)
+    local filelines = getHTMLlines(filename)
+
+    filelines = addNavHeader(filelines)
 
     return filelines
 end
