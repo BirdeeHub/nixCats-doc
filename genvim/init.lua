@@ -53,7 +53,7 @@ for _, name in ipairs(filetable) do
         }):get_content(false)
 
     local ok, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
-    if ok then print(msg) end
+    print(msg)
     my_assert(ok or not nixCats("killAfter"), msg)
 end
 
