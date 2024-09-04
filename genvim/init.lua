@@ -30,7 +30,7 @@ local doc_src = vim.g.nixCats_doc_src
 
 local okHTML, HTML, writeToFile = pcall(require('mkHTML'),doc_src)
 ---@cast HTML htmlCONSTRUCTOR
-my_assert(okHTML, "unable to load HTML builder")
+my_assert(okHTML, "unable to load HTML builder" .. vim.inspect(HTML))
 
 local builder = function(name)
     return HTML(name, { number_lines = true })
