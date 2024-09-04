@@ -3,6 +3,10 @@ require('onedark').setup { style = 'dark', }
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
 
+-- NOTE: make sure all failures exit nvim with a
+-- non-zero exit code if killAfter is true
+-- so that it actually prints the error
+-- instead of just freezing the build
 _G.my_assert = function(c, message)
     if not c then
         if nixCats('killAfter') then
