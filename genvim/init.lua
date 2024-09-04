@@ -31,8 +31,8 @@ local doc_src = vim.g.nixCats_doc_src
 local HTML, writeToFile = require('mkHTML')(doc_src)
 ---@cast HTML htmlCONSTRUCTOR
 
-for _, name in ipairs(filetable) do
-    local converted = HTML(name, { number_lines = true })
+local builder = function(name)
+    return HTML(name, { number_lines = true })
         :setBodyStyle([[display: flex; flex-direction: column]])
         :insertManyHeads({
             [[<div style="text-align: center;">]],
@@ -51,10 +51,15 @@ for _, name in ipairs(filetable) do
         }):insertManyTails({
             [[</div>]],
         }):get_content(false)
+end
 
-    local ok, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
-    if ok then print(msg) end
-    my_assert(ok, msg)
+for _, name in ipairs(filetable) do
+    local ok, converted = pcall(builder, name)
+    my_assert(ok, "assertion failed: " .. vim.inspect(converted))
+    my_assert(type(converted) == "table" and converted ~= {}, "output HTML is empty")
+    local iook, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
+    if iook then print(msg) end
+    my_assert(iook, msg)
 end
 
 if nixCats('killAfter') then
