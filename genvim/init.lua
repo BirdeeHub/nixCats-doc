@@ -28,8 +28,9 @@ local filetable = {
 local doc_out = vim.g.nixCats_doc_out
 local doc_src = vim.g.nixCats_doc_src
 
-local HTML, writeToFile = require('mkHTML')(doc_src)
+local okHTML, HTML, writeToFile = pcall(require('mkHTML'),doc_src)
 ---@cast HTML htmlCONSTRUCTOR
+my_assert(okHTML, "unable to load HTML builder")
 
 local builder = function(name)
     return HTML(name, { number_lines = true })
@@ -55,7 +56,7 @@ end
 
 for _, name in ipairs(filetable) do
     local ok, converted = pcall(builder, name)
-    my_assert(ok, "assertion failed: " .. vim.inspect(converted))
+    my_assert(ok, "HTML builder failed: " .. vim.inspect(converted))
     my_assert(type(converted) == "table" and converted ~= {}, "output HTML is empty")
     local iook, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
     if iook then print(msg) end
