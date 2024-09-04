@@ -5,8 +5,12 @@ vim.cmd.colorscheme('onedark')
 
 _G.my_assert = function(c, message)
     if not c then
-        print("assertion failed: " .. message)
-        vim.cmd.cquit("1")
+        if nixCats('killAfter') then
+            print("assertion failed: " .. message)
+            vim.cmd.cquit("1")
+        else
+            error("assertion failed: " .. message)
+        end
     end
 end
 
@@ -49,7 +53,7 @@ for _, name in ipairs(filetable) do
         }):get_content(false)
 
     local ok, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
-    print(msg)
+    if ok then print(msg) end
     my_assert(ok or not nixCats("killAfter"), msg)
 end
 
