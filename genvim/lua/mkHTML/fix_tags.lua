@@ -25,9 +25,9 @@ local function mysplit(inputstr, sep)
 end
 
 ---@class tag_entry
----@field a string
----@field b string
----@field c string
+---@field symbol string
+---@field file string
+---@field heading string
 
 ---@type tag_entry[]
 local tags = {}
@@ -35,7 +35,8 @@ local tags = {}
 return function (helptags_path)
     local lines = read_file_by_lines(helptags_path)
     for _, line in ipairs(lines) do
-        table.insert(tags,mysplit(line, "\t"))
+        local entry = mysplit(line, "\t")
+        table.insert(tags, {symbol = entry[1], file = entry[2], heading = entry[3]})
     end
     print(vim.inspect(tags))
     -- NOTE: new_tag_root will be false for relative path
