@@ -17,7 +17,7 @@
 ---new_tag_root should be a string
 ---OR false for relative path
 ---OR nil to not fix tags
----@field get_content fun(self:htmlClass,new_tag_root?:string|false):string[]
+---@field finalize_content fun(self:htmlClass,new_tag_root?:string|false,extraHelp?:table<string, string>):string[]
 
 ---HTML(filename):setBodyStyle(styleString)
 ---:insertHead(head):insertTail(tail)
@@ -88,11 +88,11 @@ local function getConstructor(doc_src)
             body_index = getBdyInx(content),
             end_body_index = getEndBdyInx(content),
             body_style = nil,
-            get_content = function(self, new_tag_root)
+            finalize_content = function(self, new_tag_root, extraHelp)
                 if new_tag_root then
-                    return fix_tags(vim.deepcopy(self.content), self.filename, new_tag_root)
+                    return fix_tags(vim.deepcopy(self.content), new_tag_root, extraHelp)
                 elseif new_tag_root == false then
-                    return fix_tags(vim.deepcopy(self.content), self.filename, false)
+                    return fix_tags(vim.deepcopy(self.content), false, extraHelp)
                 else
                     return vim.deepcopy(self.content)
                 end

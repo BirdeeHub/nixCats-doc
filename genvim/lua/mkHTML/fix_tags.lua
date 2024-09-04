@@ -50,28 +50,42 @@ return function (helptags_path)
     -- NOTE: new_tag_root will be false for relative path
     -- string for actual value if provided
     -- will never be called with nil
-    return function (html_lines, filename, new_tag_root)
+    return function (html_lines, new_tag_root, extraHelp)
         for i, line in ipairs(html_lines) do
             for match in line:gmatch([[<span class="%-label"></span><span class="%-label">(.-)</span><span class="%-label"></span>]]) do
                 local subbed = string.gsub(line,
-                    [[<span class="%-label"></span><span class="%-label">]] .. match .. [[</span><span class="%-label"></span>]],
+                    [[<span class="%-label"></span><span class="%-label">.-</span><span class="%-label"></span>]],
                     [[<span class="-label"></span><span class="%-label" id="]] .. match .. [[">]] .. match .. [[</span><span class="-label"></span>]]
                 )
                 html_lines[i] = subbed
             end
             for match in line:gmatch([[<span class="%-markup%-link"></span><span class="%-markup%-link">(.-)</span><span class="%-markup%-link"></span>]]) do
                 local matchname = tagToFile(match)
+                local linkpath
                 if matchname == nil then
                     -- NOTE: we dont have 'rtp' in our list of paths...
-                    goto continue
+                    if vim.list_contains(vim.tbl_keys(extraHelp), match) then
+                        linkpath = extraHelp[match]
+                    else
+                        my_assert(false, "no help found for: " .. vim.inspect(match))
+                        goto continue
+                    end
+                else
+                    linkpath = (new_tag_root and new_tag_root or ".") .. "/" .. matchname .. [[#]] .. match
                 end
-                local linkpath = (new_tag_root and new_tag_root or ".") .. "/" .. matchname .. [[#]] .. match
                 local subbed = string.gsub(line,
-                    [[<span class="%-markup%-link"></span><span class="%-markup%-link">]] .. match .. [[</span><span class="%-markup%-link"></span>]],
+                    [[<span class="%-markup%-link"></span><span class="%-markup%-link">.-</span><span class="%-markup%-link"></span>]],
                     [[<span class="-markup-link"></span><a href="]] .. linkpath .. [[" class="-markup-link">]] .. match .. [[</a><span class="-markup-link"></span>]]
                 )
                 html_lines[i] = subbed
                 ::continue::
+            end
+            for match in line:gmatch([[<span class="Underlined">(.-)</span>]]) do
+                local subbed = string.gsub(line,
+                    [[<span class="Underlined">.-</span>]],
+                    [[<a href="]] .. match .. [[" class="Underlined">]] .. match .. [[</a>]]
+                )
+                html_lines[i] = subbed
             end
         end
         return html_lines

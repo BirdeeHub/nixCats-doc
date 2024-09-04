@@ -55,7 +55,9 @@ local builder = function(name)
             [[<div style="display: flex; flex-direction: row">]],
         }):insertManyTails({
             [[</div>]],
-        }):get_content(false)
+        }):finalize_content(false, {
+            [ [['rtp']] ] = [[https://neovim.io/doc/user/options.html#'rtp']],
+        })
 end
 
 for _, name in ipairs(filetable) do
