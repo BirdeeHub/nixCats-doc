@@ -45,7 +45,7 @@ local function getConstructor(doc_src)
     ---@return htmlClass
     local function HTML(target_filename, opts)
         local function getHTMLlines(fname)
-            my_assert(fname ~= nil and fname ~= "", "cannot get html lines without a filename")
+            my_assert(type(fname) == "string" and fname ~= "", "cannot get html lines without a filename")
 
             local srcpath = doc_src .. "/" .. fname .. ".txt"
             local buffer = vim.api.nvim_create_buf(true, false)
