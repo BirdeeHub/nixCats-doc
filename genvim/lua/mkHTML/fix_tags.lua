@@ -13,7 +13,7 @@ local function read_file_by_lines(filename)
     return lines
 end
 
-local function mysplit(inputstr, sep)
+local function split(inputstr, sep)
   if sep == nil then
     sep = "%s"
   end
@@ -28,23 +28,52 @@ end
 ---@field symbol string
 ---@field file string
 ---@field heading string
+---@field path? string
 
 ---@type tag_entry[]
 local tags = {}
 
+local tagToFile = function (symbol)
+    for _, entry in ipairs(tags) do
+        if entry.symbol == symbol then
+            return entry.file
+        end
+    end
+end
+
 return function (helptags_path)
     local lines = read_file_by_lines(helptags_path)
     for _, line in ipairs(lines) do
-        local entry = mysplit(line, "\t")
-        table.insert(tags, {symbol = entry[1], file = entry[2], heading = entry[3]})
+        local entry = split(line, "\t")
+        table.insert(tags, {symbol = entry[1], file = string.sub(entry[2],1,-5) .. ".html", heading = entry[3]})
     end
-    print(vim.inspect(tags))
     -- NOTE: new_tag_root will be false for relative path
     -- string for actual value if provided
     -- will never be called with nil
     return function (html_lines, filename, new_tag_root)
-        -- TODO: make vimdoc tag links into links
-        -- TODO: make vimdoc headings able to be linked to
+        for i, line in ipairs(html_lines) do
+            for match in line:gmatch([[<span class="%-label"></span><span class="%-label">(.-)</span><span class="%-label"></span>]]) do
+                local subbed = string.gsub(line,
+                    [[<span class="%-label"></span><span class="%-label">]] .. match .. [[</span><span class="%-label"></span>]],
+                    [[<span class="-label"></span><span class="%-label" id="]] .. match .. [[">]] .. match .. [[</span><span class="-label"></span>]]
+                )
+                html_lines[i] = subbed
+            end
+            -- TODO: make vimdoc tag links into links to the headings above
+            for match in line:gmatch([[<span class="%-markup%-link"></span><span class="%-markup%-link">(.-)</span><span class="%-markup%-link"></span>]]) do
+                local matchname = tagToFile(match)
+                if matchname == nil then
+                    goto continue
+                end
+                local linkpath = (new_tag_root and new_tag_root or ".") .. "/" .. matchname .. [[#]] .. match
+                local subbed = string.gsub(line,
+                    [[<span class="%-markup%-link"></span><span class="%-markup%-link">]] .. match .. [[</span><span class="%-markup%-link"></span>]],
+                    [[<span class="-markup-link"></span><a href="]] .. linkpath .. [[" class="-markup-link">]] .. match .. [[</a><span class="-markup-link"></span>]]
+                )
+                html_lines[i] = subbed
+                ::continue::
+            end
+        end
         return html_lines
     end
 end
