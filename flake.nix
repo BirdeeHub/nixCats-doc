@@ -46,7 +46,7 @@
           };
         };
       in
-      nixCats.utils.baseBuilder ./genvim {
+      nixCats.utils.baseBuilder ./. {
         inherit nixpkgs system;
       } categoryDefinitions packageDefinitions "genvim";
 
