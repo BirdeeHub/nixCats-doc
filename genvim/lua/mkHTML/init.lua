@@ -122,6 +122,7 @@ local function getConstructor(doc_src)
                 return self
             end,
             insertManyHeads = function(self, lines)
+                my_assert(#lines > 0, "error: empty contents")
                 for i = #lines, 1, -1 do
                     self:insertHead(lines[i])
                 end
@@ -134,6 +135,7 @@ local function getConstructor(doc_src)
                 return self
             end,
             insertManyTails = function(self, lines)
+                my_assert(#lines > 0, "error: empty contents")
                 for i = #lines, 1, -1 do
                     self:insertTail(lines[i])
                 end
