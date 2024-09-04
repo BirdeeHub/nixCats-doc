@@ -45,6 +45,7 @@ return function (helptags_path)
     local lines = read_file_by_lines(helptags_path)
     for _, line in ipairs(lines) do
         local entry = split(line, "\t")
+        -- NOTE: dont forget to replact .txt with .html!
         table.insert(tags, {symbol = entry[1], file = string.sub(entry[2],1,-5) .. ".html", heading = entry[3]})
     end
     -- NOTE: new_tag_root will be false for relative path
@@ -71,7 +72,7 @@ return function (helptags_path)
                         goto continue
                     end
                 else
-                    linkpath = (new_tag_root and new_tag_root or ".") .. "/" .. matchname .. [[#]] .. match
+                    linkpath = (new_tag_root or ".") .. "/" .. matchname .. [[#]] .. match
                 end
                 local subbed = string.gsub(line,
                     [[<span class="%-markup%-link"></span><span class="%-markup%-link">.-</span><span class="%-markup%-link"></span>]],
