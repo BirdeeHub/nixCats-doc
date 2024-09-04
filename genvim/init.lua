@@ -1,5 +1,5 @@
 -- dark, darker, cool, deep, warm, warmer, light
-require('onedark').setup { style = 'dark', }
+require('onedark').setup { style = 'darker', }
 require('onedark').load()
 vim.cmd.colorscheme('onedark')
 
