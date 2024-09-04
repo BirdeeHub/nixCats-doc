@@ -50,7 +50,8 @@ local function getConstructor(doc_src)
             local srcpath = doc_src .. "/" .. fname .. ".txt"
             local buffer = vim.api.nvim_create_buf(true, false)
             vim.api.nvim_buf_call(buffer, function()
-                vim.cmd.edit(srcpath)
+                local ok = pcall(vim.cmd.edit,srcpath)
+                my_assert(ok, "error: unable to open " .. srcpath)
             end)
             local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
             local htmlopts = vim.tbl_extend("force", opts or {}, { title = fname })
@@ -65,6 +66,7 @@ local function getConstructor(doc_src)
                     return i
                 end
             end
+            my_assert(false, "error: no start of body")
         end
         local function getEndBdyInx(filelines)
             if #filelines == 0 then
@@ -75,8 +77,10 @@ local function getConstructor(doc_src)
                     return i
                 end
             end
+            my_assert(false, "error: no end of body")
         end
         local content = getHTMLlines(target_filename)
+        my_assert(type(content) == "table" and content ~= {}, "error: empty content")
 
         return vim.deepcopy({
             filename = target_filename,
@@ -104,15 +108,15 @@ local function getConstructor(doc_src)
                 return self
             end,
             setBodyStyle = function(self, style)
-                my_assert(type(self.body_index) == "number", "error: empty contents")
+                my_assert(self.body_index > 0, "error: empty contents")
                 self.body_style = style
                 table.remove(self.content, self.body_index)
                 table.insert(self.content, self.body_index, [[<body style="]] .. style .. [[">]])
                 return self
             end,
             insertHead = function(self, line)
-                my_assert(type(self.body_index) == "number", "error: empty contents")
-                my_assert(type(self.end_body_index) == "number", "error: empty contents")
+                my_assert(self.body_index > 0, "error: empty contents")
+                my_assert(self.end_body_index > 0, "error: empty contents")
                 table.insert(self.content, self.body_index + 1, line)
                 self.end_body_index = self.end_body_index + 1
                 return self
@@ -124,8 +128,8 @@ local function getConstructor(doc_src)
                 return self
             end,
             insertTail = function(self, line)
-                my_assert(type(self.body_index) == "number", "error: empty contents")
-                my_assert(type(self.end_body_index) == "number", "error: empty contents")
+                my_assert(self.body_index > 0, "error: empty contents")
+                my_assert(self.end_body_index > 0, "error: empty contents")
                 table.insert(self.content, self.end_body_index, line)
                 return self
             end,

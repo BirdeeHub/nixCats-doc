@@ -50,9 +50,7 @@ for _, name in ipairs(filetable) do
 
     local ok, msg = writeToFile(doc_out .. "/" .. name .. ".html", converted)
     print(msg)
-    if not ok and nixCats("killAfter") then
-        vim.cmd.cquit("1")
-    end
+    my_assert(ok or not nixCats("killAfter"), msg)
 end
 
 if nixCats('killAfter') then
