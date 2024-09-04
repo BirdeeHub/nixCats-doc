@@ -59,10 +59,10 @@ return function (helptags_path)
                 )
                 html_lines[i] = subbed
             end
-            -- TODO: make vimdoc tag links into links to the headings above
             for match in line:gmatch([[<span class="%-markup%-link"></span><span class="%-markup%-link">(.-)</span><span class="%-markup%-link"></span>]]) do
                 local matchname = tagToFile(match)
                 if matchname == nil then
+                    -- NOTE: we dont have 'rtp' in our list of paths...
                     goto continue
                 end
                 local linkpath = (new_tag_root and new_tag_root or ".") .. "/" .. matchname .. [[#]] .. match
