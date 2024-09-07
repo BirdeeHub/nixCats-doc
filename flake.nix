@@ -59,14 +59,26 @@
           readmePath = if isNixDir then "${nixCats}/../README.md" else "${nixCats}/README.md";
         in /* bash */ ''
           export HOME=$(mktemp -d)
+          pandocGen() {
+            local pan_in=$1
+            local pan_out=$2
+            local pan_title=$3
+            ${pkgs.pandoc}/bin/pandoc --standalone --template ${./md/github-markdown-dark.html} "$(realpath "$pan_in")" -o "$pan_out" -V title="$pan_title"
+          }
           mkdir -p $out
+          # use nvim headless and the config to generate html from nvim docs
           ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[$src]]"
-          ${pkgs.pandoc}/bin/pandoc --standalone --template ${./md/github-markdown-dark.html} "$(realpath "${readmePath}")" -o $out/index.html -V title="NIX CATEGORIES FOR NVIM"
-          ${pkgs.pandoc}/bin/pandoc --standalone --template ${./md/github-markdown-dark.html} "$(realpath "${./md/TOC.md}")" -o $out/TOC.html -V title="nixCats.org TOC"
+          # get a basic github theme css from github for markdown pandoc-generated pages
           cp ${mkdncss}/github-markdown-dark.css $out/github-markdown-dark.css
+          pandocGen ${readmePath} $out/index.html "NIX CATEGORIES FOR NVIM"
+
+          # all pages that arent from the main nixCats repo
+          pandocGen ${./md/TOC.md} $out/TOC.html "nixCats.org TOC"
         '';
       };
     in {
+      # we built the drv. Now we have to get it out of the store. Instead of installing the drv,
+      # we install a script that copies the contents of the drv to a specified directory
       default = pkgs.writeShellScriptBin "replaceNixCatsDocs" ''
         finaloutpath=''${1:-"."}
         mkdir -p "$finaloutpath"
@@ -75,6 +87,8 @@
         chmod +w $finaloutpath/*.css
       '';
 
+      # for debug purposes, the nvim drv used to gen the docs
+      # but told not to die on errors in the config.
       genvim = genvim.override (prev: {
         packageDefinitions = {
           genvim = args: {
