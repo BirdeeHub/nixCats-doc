@@ -10,8 +10,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim?dir=nix";
+    # nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?dir=nix";
     mkdncss = {
       url = "github:sindresorhus/github-markdown-css";
+      # url = "github:jez/pandoc-markdown-css-theme";
       flake = false;
     };
   };
@@ -83,8 +85,8 @@
         finaloutpath=''${1:-"."}
         mkdir -p "$finaloutpath"
         cp -rvf ${docsite}/* "$finaloutpath"
-        chmod +w $finaloutpath/*.html
-        chmod +w $finaloutpath/*.css
+        chmod -R 750 "$finaloutpath"
+        find "$finaloutpath" -type f -exec chmod 640 {} \;
       '';
 
       # for debug purposes, the nvim drv used to gen the docs
