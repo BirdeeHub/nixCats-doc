@@ -82,7 +82,7 @@
           --from markdown+tex_math_single_backslash \
           --filter pandoc-sidenote \
           --to html5+smart \
-          --template ${mkdncss}/template.html5 \
+          --template ${./md/template.html5} \
           --css="./css/theme.css" \
           --css="./css/skylighting-solarized-theme.css" \
           --toc \
