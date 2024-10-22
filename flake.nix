@@ -86,7 +86,7 @@
         mkdir -p "$finaloutpath"
         cp -rvf ${docsite}/* "$finaloutpath"
         chmod -R 750 "$finaloutpath"
-        find "$finaloutpath" -type f -exec chmod 640 {} \;
+        find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
 
       # for debug purposes, the nvim drv used to gen the docs
