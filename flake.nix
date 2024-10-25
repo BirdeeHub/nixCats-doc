@@ -9,8 +9,8 @@
   '';
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?branch=dev";
+    nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    # nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?branch=dev";
     mkdncss = {
       # url = "github:jez/pandoc-markdown-css-theme";
       url = "github:sindresorhus/github-markdown-css";
