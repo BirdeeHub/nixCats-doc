@@ -9,8 +9,8 @@
   '';
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixCats.url = "github:BirdeeHub/nixCats-nvim?dir=nix";
-    # nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?dir=nix";
+    # nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?branch=dev";
     mkdncss = {
       # url = "github:jez/pandoc-markdown-css-theme";
       url = "github:sindresorhus/github-markdown-css";
@@ -92,13 +92,10 @@
           "$(realpath "$pan_in")"
       '';
 
-      isNixDir = builtins.pathExists "${nixCats}/nixCatsHelp";
       docsite = pkgs.stdenv.mkDerivation {
         name = "genNixCatsDocs";
-        src = if isNixDir then "${nixCats}/nixCatsHelp" else "${nixCats}/nix/nixCatsHelp";
-        buildPhase = let
-          readmePath = if isNixDir then "${nixCats}/../README.md" else "${nixCats}/README.md";
-        in /* bash */ ''
+        src = "${nixCats}/nixCatsHelp";
+        buildPhase = /* bash */ ''
           export HOME=$(mktemp -d)
           do_copy=0
           pandocGen() {
@@ -110,7 +107,7 @@
           ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[$src]]"
 
           # run pandoc on the readme
-          pandocGen "${readmePath}" "$out/index.html" "NIX CATEGORIES FOR NVIM"
+          pandocGen "${nixCats}/README.md" "$out/index.html" "NIX CATEGORIES FOR NVIM"
 
           # run pandoc on all pages that arent from the main nixCats repo
           pandocGen "${./md/TOC.md}" "$out/TOC.html" "nixCats.org TOC"
