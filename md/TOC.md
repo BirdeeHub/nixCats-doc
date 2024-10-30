@@ -7,7 +7,7 @@
 - [main docs for nixCats nix format](./nixCats_format.html)
 - [luaUtils and lazy.nvim wrapper](./nixCats_luaUtils.html)
 - [overriding an existing nixCats on import](./nixCats_overriding.html)
-- [modules, similar to overriding but as a module](./nixCats_modules.html)
+- [modules](./nixCats_modules.html)
 - [how to set up LSPs for nix, and how to manage mason on nixos](./nix_LSPS.html)
 - [some optional advice for managing overlays](./nix_overlays.html)
 
