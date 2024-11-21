@@ -92,6 +92,9 @@
           --output "$pan_out" \
           "$(realpath "$pan_in")"
       '';
+      GenCatHMdoc = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatHMdoc"; isHomeManager = true; } // inputs);
+      GenCatModDoc = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
+      GenCatUtilDoc = pkgs.callPackage ./fromcommenttest/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
 
       docsite = pkgs.stdenv.mkDerivation {
         name = "genNixCatsDocs";
@@ -124,9 +127,7 @@
         chmod -R 750 "$finaloutpath"
         find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
-      HMmodDocTest = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatHMdoc"; isHomeManager = true; } // inputs);
-      modDocTest = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
-      utilDocTest = pkgs.callPackage ./fromcommenttest/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc;
 
       # for debug purposes, the nvim drv used to gen the docs
       # but told not to die on errors in the config.

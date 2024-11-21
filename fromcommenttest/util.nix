@@ -1,7 +1,6 @@
 { APPNAME
 , nixCats
 , nixdoc
-, lib
 , system
 , writeShellScriptBin
 , ...
