@@ -125,6 +125,26 @@
           pandocGen "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
         '';
       };
+
+      tovimdoc = pkgs.writeShellScriptBin "tovimdoc" ''
+        OUTDIR="''${1:-"."}"
+        pandoccmd () {
+          ${pkgs.panvimdoc}/bin/panvimdoc --toc false --project-name "nixCats" --input-file "$1"
+        }
+        TEMPDIR="$(mktemp -d)"
+        mkdir -p "$TEMPDIR"
+        mkdir -p "$TEMPDIR/doc"
+        TEMPFILE="$TEMPDIR/temp.md"
+        cd "$TEMPDIR"
+        ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
+        pandoccmd "$TEMPFILE"
+        ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
+        pandoccmd "$TEMPFILE"
+        ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
+        pandoccmd "$TEMPFILE"
+        mkdir -p "$OUTDIR"
+        cp "$TEMPDIR/doc/"* "$OUTDIR"
+      '';
     in {
       # we built the drv. Now we have to get it out of the store. Instead of installing the drv,
       # we install a script that copies the contents of the drv to a specified directory
@@ -135,7 +155,7 @@
         chmod -R 750 "$finaloutpath"
         find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc;
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc tovimdoc;
 
       # for debug purposes, the nvim drv used to gen the docs
       # but told not to die on errors in the config.
