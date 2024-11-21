@@ -8,6 +8,7 @@
 }: let
   eval'd = lib.evalModules {
     modules = [
+      { _module.check = false; }
       (import "${nixCats}/utils/mkOpts.nix" {
         inherit isHomeManager;
         nclib = import "${nixCats}/utils/lib.nix";

@@ -115,6 +115,14 @@
 
           # run pandoc on all pages that arent from the main nixCats repo
           pandocGen "${./md/TOC.md}" "$out/TOC.html" "nixCats.org TOC"
+          
+          TEMPFILE=$(mktemp)
+          ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
+          pandocGen "$TEMPFILE" "$out/nixCats_utils.html" "nixCats.utils API"
+          ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
+          pandocGen "$TEMPFILE" "$out/nixCats_hm_options.html" "nixCats home-manager options"
+          ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
+          pandocGen "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
         '';
       };
     in {
