@@ -16,6 +16,7 @@
       url = "github:sindresorhus/github-markdown-css";
       flake = false;
     };
+    nixdoc.url = "github:nix-community/nixdoc";
   };
   outputs = { nixpkgs, nixCats, mkdncss, ... }@inputs: let
     forSys = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
@@ -123,6 +124,9 @@
         chmod -R 750 "$finaloutpath"
         find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
+      HMmodDocTest = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatHMdoc"; isHomeManager = true; } // inputs);
+      modDocTest = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
+      utilDocTest = pkgs.callPackage ./fromcommenttest/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
 
       # for debug purposes, the nvim drv used to gen the docs
       # but told not to die on errors in the config.
