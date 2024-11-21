@@ -129,7 +129,7 @@
       tovimdoc = pkgs.writeShellScriptBin "tovimdoc" ''
         OUTDIR="''${1:-"."}"
         pandoccmd () {
-          ${pkgs.panvimdoc}/bin/panvimdoc --toc false --project-name "nixCats" --input-file "$1"
+          ${pkgs.panvimdoc}/bin/panvimdoc --toc false --project-name "$2" --input-file "$1"
         }
         TEMPDIR="$(mktemp -d)"
         mkdir -p "$TEMPDIR"
@@ -137,11 +137,11 @@
         TEMPFILE="$TEMPDIR/temp.md"
         cd "$TEMPDIR"
         ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
-        pandoccmd "$TEMPFILE"
+        pandoccmd "$TEMPFILE" "nixCats.utils"
         ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
-        pandoccmd "$TEMPFILE"
+        pandoccmd "$TEMPFILE" "nixCats.home-manager"
         ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
-        pandoccmd "$TEMPFILE"
+        pandoccmd "$TEMPFILE" "nixCats.nixos"
         mkdir -p "$OUTDIR"
         cp "$TEMPDIR/doc/"* "$OUTDIR"
       '';
