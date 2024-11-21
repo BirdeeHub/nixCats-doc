@@ -9,5 +9,5 @@
   docfile = "${nixCats}/utils/default.nix";
 in
 writeShellScriptBin APPNAME ''
-  ${nixdoc.packages.${system}.default}/bin/nixdoc --category "nixCats.utils" --description "nixCats.utils set documentation" --file ${docfile} --prefix ""
+  ${nixdoc.packages.${system}.default}/bin/nixdoc --category "utils" --description "nixCats.utils set documentation" --file ${docfile} --prefix "nixCats"
 ''
