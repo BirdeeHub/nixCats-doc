@@ -8,16 +8,6 @@ writeTextFile {
   name = APPNAME;
   text = /*lua*/ ''
     #!${luajit.interpreter}
-    function os.capture(cmd, trim)
-      local f = assert(io.popen(cmd, 'r'), "unable to execute: " .. cmd)
-      local s = assert(f:read('*a'), "unable to read output of: " .. cmd)
-      f:close()
-      if not trim then return s end
-      s = string.gsub(s, '^%s+', "")
-      s = string.gsub(s, '%s+$', "")
-      s = string.gsub(s, '[\n\r]+', ' ')
-      return s
-    end
     local nixCatsSrc = [[${nixCats}/templates/]]
     local templatetable = ${nixCats.utils.n2l.toLua nixCats.utils.templates}
     local resmarkdown = ""
