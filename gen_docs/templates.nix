@@ -18,7 +18,7 @@ writeTextFile {
       s = string.gsub(s, '[\n\r]+', ' ')
       return s
     end
-    local nixCatsSrc = [[${nixCats}/]]
+    local nixCatsSrc = [[${nixCats}/templates/]]
     local templatetable = ${nixCats.utils.n2l.toLua nixCats.utils.templates}
     local resmarkdown = ""
     for k, v in pairs(templatetable) do
