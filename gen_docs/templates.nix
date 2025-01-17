@@ -14,8 +14,10 @@ writeTextFile {
     for k, v in pairs(templatetable) do
       if type(v) == "table" then
         if v.path:sub(1, #nixCatsSrc) == nixCatsSrc then
-            v.path = "nix flake init -t github.com/BirdeeHub/nixCats-nvim#" .. v.path:sub(#nixCatsSrc + 1)
-            resmarkdown = resmarkdown .. "# " .. k .. "\n\n"
+            local filename = v.path:sub(#nixCatsSrc + 1)
+            local link = "https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/" .. filename
+            v.path = "nix flake init -t github.com/BirdeeHub/nixCats-nvim#" .. filename
+            resmarkdown = resmarkdown .. "# [" .. k .. "](" .. link .. ")\n\n"
             resmarkdown = resmarkdown .. "`" .. v.path .. "`\n\n"
             resmarkdown = resmarkdown .. v.description .. "\n\n"
         end
