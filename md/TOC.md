@@ -28,3 +28,6 @@
 ## Source:
 - [main source of nixCats - github:BirdeeHub/nixCats-nvim](https://github.com/BirdeeHub/nixCats-nvim)
 - [source of nixcats.org - github:BirdeeHub/nixCats-doc](https://github.com/BirdeeHub/nixCats-doc)
+
+## Work in Progress:
+- [nixCats template list](./nixCats_templates.html)
