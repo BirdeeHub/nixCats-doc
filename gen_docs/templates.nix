@@ -7,7 +7,7 @@
 writeTextFile {
   name = APPNAME;
   text = /*lua*/ ''
-    #!${luajit}/bin/luajit
+    #!${luajit.interpreter}
     function os.capture(cmd, trim)
       local f = assert(io.popen(cmd, 'r'), "unable to execute: " .. cmd)
       local s = assert(f:read('*a'), "unable to read output of: " .. cmd)
