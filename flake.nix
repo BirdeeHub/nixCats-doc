@@ -12,13 +12,16 @@
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
     # nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?branch=dev";
     mkdncss = {
-      # url = "github:jez/pandoc-markdown-css-theme";
       url = "github:sindresorhus/github-markdown-css";
+      flake = false;
+    };
+    mkdncss2 = {
+      url = "github:jez/pandoc-markdown-css-theme";
       flake = false;
     };
     nixdoc.url = "github:nix-community/nixdoc";
   };
-  outputs = { nixpkgs, nixCats, mkdncss, ... }@inputs: let
+  outputs = { nixpkgs, nixCats, mkdncss, mkdncss2, ... }@inputs: let
     forSys = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
   in {
     packages = forSys (system: let
@@ -55,7 +58,6 @@
 
       pkgs = import nixpkgs { inherit system; };
 
-      # NOTE: this is the pandoc command currently being used
       pandocCMD = pkgs.writeShellScript "pandocCMD" ''
         export PATH="${nixpkgs.lib.makeBinPath (with pkgs; [ coreutils pandoc ])}:$PATH"
         do_copy=$1 nix_out=$2
@@ -69,15 +71,14 @@
           -o "$pan_out" \
           "$(realpath "$pan_in")"
       '';
-      # don't mind this, just trying out other themes
-      # url = "github:jez/pandoc-markdown-css-theme";
-      pandocCMDtest = pkgs.writeShellScript "pandocCMD" ''
+
+      pandocCMD2 = pkgs.writeShellScript "pandocCMD" ''
         export PATH="${nixpkgs.lib.makeBinPath (with pkgs; [ coreutils pandoc haskellPackages.pandoc-sidenote ])}:$PATH"
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
         $(exit "$do_copy") && {
           mkdir -p $nix_out/css && \
-          cp ${mkdncss}/public/css/* $nix_out/css
+          cp ${mkdncss2}/public/css/* $nix_out/css
         } || true
         pandoc --katex \
           --from markdown+tex_math_single_backslash \
@@ -92,9 +93,10 @@
           --output "$pan_out" \
           "$(realpath "$pan_in")"
       '';
-      GenCatHMdoc = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatHMdoc"; isHomeManager = true; } // inputs);
-      GenCatModDoc = pkgs.callPackage ./fromcommenttest/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
-      GenCatUtilDoc = pkgs.callPackage ./fromcommenttest/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
+      GenCatHMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ APPNAME = "GenCatHMdoc"; isHomeManager = true; } // inputs);
+      GenCatModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
+      GenCatUtilDoc = pkgs.callPackage ./gen_docs/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
+      GenCatTemplateDoc = pkgs.callPackage ./gen_docs/templates.nix ({ APPNAME = "GenCatTemplateDoc"; } // inputs);
 
       docsite = pkgs.stdenv.mkDerivation {
         name = "genNixCatsDocs";
@@ -104,6 +106,11 @@
           do_copy=0
           pandocGen() {
             ${pandocCMD} "$do_copy" "$out" "$@"
+            do_copy=1
+          }
+          do_copy_2=0
+          pandocGen2() {
+            ${pandocCMD2} "$do_copy_2" "$out" "$@"
             do_copy=1
           }
 
@@ -118,11 +125,13 @@
           
           TEMPFILE=$(mktemp)
           ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
-          pandocGen "$TEMPFILE" "$out/nixCats_utils.html" "nixCats.utils API"
+          pandocGen2 "$TEMPFILE" "$out/nixCats_utils.html" "nixCats.utils API"
           ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
-          pandocGen "$TEMPFILE" "$out/nixCats_hm_options.html" "nixCats home-manager options"
+          pandocGen2 "$TEMPFILE" "$out/nixCats_hm_options.html" "nixCats home-manager options"
           ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
-          pandocGen "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
+          pandocGen2 "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
+          ${GenCatTemplateDoc}/bin/GenCatTemplateDoc > $TEMPFILE
+          pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
         '';
       };
 
@@ -155,7 +164,7 @@
         chmod -R 750 "$finaloutpath"
         find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc tovimdoc;
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc tovimdoc;
 
       # for debug purposes, the nvim drv used to gen the docs
       # but told not to die on errors in the config.
