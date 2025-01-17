@@ -21,7 +21,8 @@
 - [starter template 2 - nixExpressionFlakeOutputs](https://github.com/BirdeeHub/nixCats-nvim/blob/main/templates/nixExpressionFlakeOutputs/default.nix)
 - [luaUtils template for nix to no-nix compatibility](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/luaUtils)
 - [override-from-scratch template](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/overwrite)
-- [module templates](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/module)
+- [nixos/nix-darwin templates](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/nixos)
+- [home-manager template](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/home-manager)
 - [word-for-word kickstart-nvim in starter template 1 using lazy wrapper from luaUtils](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/kickstart-nvim)
 - [all other templates](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates)
 
