@@ -16,7 +16,7 @@ writeTextFile {
         if v.path:sub(1, #nixCatsSrc) == nixCatsSrc then
             v.path = "nix flake init -t github.com/BirdeeHub/nixCats-nvim#" .. v.path:sub(#nixCatsSrc + 1)
             resmarkdown = resmarkdown .. "# " .. k .. "\n\n"
-            resmarkdown = resmarkdown .. v.path .. "\n\n"
+            resmarkdown = resmarkdown .. "`" .. v.path .. "`\n\n"
             resmarkdown = resmarkdown .. v.description .. "\n\n"
         end
       end
