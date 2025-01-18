@@ -1,11 +1,4 @@
 local nixinfo = require("nixinfo")
-function table.values(t)
-  local values = {}
-  for _, v in pairs(t) do
-    table.insert(values, v)
-  end
-  return values
-end
 local function toMD(name,path,description)
   local res = ""
   local srclen = #nixinfo.nixCats
@@ -18,7 +11,27 @@ local function toMD(name,path,description)
   end
   return res
 end
-local templatetable = table.values(nixinfo.templates);
+
+local order = {
+    "default",
+    "luaUtils",
+    "home-manager",
+    "nixos",
+    "nixExpressionFlakeOutputs",
+    "example",
+    "kickstart-nvim",
+    "LazyVim",
+}
+
+local templatetable = {}
+for _, v in ipairs(order) do
+    table.insert(templatetable, nixinfo.templates[v])
+    nixinfo.templates[v] = nil
+end
+for _, v in pairs(nixinfo.templates) do
+  table.insert(templatetable, v)
+end
+
 local resmarkdown = ""
 for _, v in ipairs(templatetable) do
   resmarkdown = resmarkdown .. toMD(v.name,v.path,v.description)
