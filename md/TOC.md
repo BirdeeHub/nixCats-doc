@@ -17,16 +17,6 @@
 - [nixCats home-manager options](./nixCats_hm_options.html)
 - [nixCats nixos options](./nixCats_nixos_options.html)
 
-## Templates:
-- [starter template 1 - fresh - default - standalone flake](https://github.com/BirdeeHub/nixCats-nvim/blob/main/templates/fresh/flake.nix)
-- [starter template 2 - nixExpressionFlakeOutputs](https://github.com/BirdeeHub/nixCats-nvim/blob/main/templates/nixExpressionFlakeOutputs/default.nix)
-- [luaUtils template for nix to no-nix compatibility](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/luaUtils)
-- [override-from-scratch template](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/overwrite)
-- [nixos/nix-darwin templates](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/nixos)
-- [home-manager template](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/home-manager)
-- [word-for-word kickstart-nvim in starter template 1 using lazy wrapper from luaUtils](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/kickstart-nvim)
-- [all other templates](https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates)
-
 ## Source:
 - [main source of nixCats - github:BirdeeHub/nixCats-nvim](https://github.com/BirdeeHub/nixCats-nvim)
 - [source of nixcats.org - github:BirdeeHub/nixCats-doc](https://github.com/BirdeeHub/nixCats-doc)
