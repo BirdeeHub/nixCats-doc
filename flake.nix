@@ -131,7 +131,7 @@
           ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
           ${GenCatTemplateDoc}/bin/GenCatTemplateDoc > $TEMPFILE
-          pandocGen "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
+          pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
         '';
       };
 
