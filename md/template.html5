@@ -53,23 +53,22 @@ $endif$
 </blockquote>
 </header>
 
-<div style="text-align: center;">
-<style>
-a { color: #1a73e8; text-decoration: none; }
-a:visited { color: #1a73e8; }
-a:hover { color: #155ab6; text-decoration: underline; }
-a:active { color: #003d99; }
-</style>
-<a href="./index.html" style="margin-right: 10px;">HOME</a>
-<a href="./TOC.html" style="margin-right: 10px;">TOC</a>
-<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>
-</div>
-
 $if(toc)$
 <nav id="$idprefix$TOC" role="doc-toc">
   $if(return-url)$
   <a href="$return-url$">$if(return-text)$$return-text$$else$← Return$endif$</a><br>
   $endif$
+  <div style="text-align: center;">
+    <style>
+      a { color: #1a73e8; text-decoration: none; }
+      a:visited { color: #1a73e8; }
+      a:hover { color: #155ab6; text-decoration: underline; }
+      a:active { color: #003d99; }
+    </style>
+    <a href="./index.html" style="margin-right: 10px;">HOME</a>
+    <a href="./TOC.html" style="margin-right: 10px;">TOC</a>
+    <a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>
+  </div>
   <strong>Contents</strong><label for="contents">⊕</label>
   <input type="checkbox" id="contents">
   $table-of-contents$
