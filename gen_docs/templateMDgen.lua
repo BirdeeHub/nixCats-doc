@@ -4,7 +4,7 @@ local function toMD(name,path,description)
   local srclen = #nixinfo.nixCats
   if path:sub(1, srclen) == nixinfo.nixCats then
     local link = "https://github.com/BirdeeHub/nixCats-nvim/tree/main" .. path:sub(srclen + 1)
-    local initcmd = "nix flake init -t github.com/BirdeeHub/nixCats-nvim#" .. name
+    local initcmd = "nix flake init -t github:BirdeeHub/nixCats-nvim#" .. name
     res = "# [" .. name .. "](" .. link .. ")\n\n"
     res = res .. "`" .. initcmd .. "`\n\n"
     res = res .. description .. "\n\n"
