@@ -25,37 +25,7 @@
     forSys = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
   in {
     packages = forSys (system: let
-      genvim = let
-        categoryDefinitions = { pkgs, settings, categories, name, ... }: {
-          startupPlugins = {
-            general = with pkgs.vimPlugins; [
-              onedark-nvim
-              (nvim-treesitter.withPlugins (plugins: with plugins; [
-                vimdoc
-                vim
-                luadoc
-                todotxt
-                nix
-                lua
-                bash
-              ]))
-            ];
-          };
-        };
-        packageDefinitions = {
-          genvim = {pkgs , ... }: {
-            settings = {};
-            categories = {
-              killAfter = true;
-              general = true;
-            };
-          };
-        };
-      in
-      nixCats.utils.baseBuilder ./genvim {
-        inherit nixpkgs system;
-      } categoryDefinitions packageDefinitions "genvim";
-
+      genvim = import ./genvim { inherit system inputs; };
       pkgs = import nixpkgs { inherit system; };
 
       pandocCMD = pkgs.writeShellScript "pandocCMD" ''
