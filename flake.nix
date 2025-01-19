@@ -52,7 +52,7 @@
           };
         };
       in
-      nixCats.utils.baseBuilder ./. {
+      nixCats.utils.baseBuilder ./genvim {
         inherit nixpkgs system;
       } categoryDefinitions packageDefinitions "genvim";
 
@@ -136,6 +136,7 @@
         '';
       };
 
+      # maybe one day I can get this to work
       tovimdoc = pkgs.writeShellScriptBin "tovimdoc" ''
         OUTDIR="''${1:-"."}"
         pandoccmd () {
@@ -169,7 +170,12 @@
         chmod -R 750 "$finaloutpath"
         find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc tovimdoc;
+
+      # these generate markdown to stdout
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc;
+
+      # maybe one day I can get this to work
+      inherit tovimdoc;
 
       # for debug purposes, the nvim drv used to gen the docs
       # but told not to die on errors in the config.
