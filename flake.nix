@@ -33,7 +33,8 @@
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
         $(exit "$do_copy") && {
-          cp ${mkdncss}/github-markdown-dark.css $nix_out/github-markdown-dark.css
+          mkdir -p $nix_out/css && \
+          cp ${mkdncss}/github-markdown-dark.css $nix_out/css/github-markdown-dark.css
         } || true
         pandoc --standalone \
           --template ${./md/github-markdown-dark.html} \
