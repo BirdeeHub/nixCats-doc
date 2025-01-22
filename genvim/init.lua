@@ -40,12 +40,12 @@ local builder = function(name)
     return HTML(name, { number_lines = true })
         :setBodyStyle([[display: flex; flex-direction: column]])
         :insertManyHeads({
-            [[<div style="text-align: center;">]],
+            [[<div id="nav-links" style="text-align: center;">]],
             [[<style>]],
-            [[a { color: #1a73e8; text-decoration: none; }]],
-            [[a:visited { color: #1a73e8; }]],
-            [[a:hover { color: #155ab6; text-decoration: underline; }]],
-            [[a:active { color: #003d99; }]],
+            [[#nav-links a { color: #1a73e8; text-decoration: none; }]],
+            [[#nav-links a:visited { color: #1a73e8; }]],
+            [[#nav-links a:hover { color: #155ab6; text-decoration: underline; }]],
+            [[#nav-links a:active { color: #003d99; }]],
             [[</style>]],
             [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
             [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],

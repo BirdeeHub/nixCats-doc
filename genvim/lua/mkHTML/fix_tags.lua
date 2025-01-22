@@ -54,9 +54,10 @@ return function (helptags_path)
     return function (html_lines, new_tag_root, extraHelp)
         for i, line in ipairs(html_lines) do
             for match in line:gmatch([[<span class="%-label"></span><span class="%-label">(.-)</span><span class="%-label"></span>]]) do
+                local linkpath = (new_tag_root or ".") .. "/" .. tagToFile(match) .. [[#]] .. match
                 local subbed = string.gsub(line,
                     [[<span class="%-label"></span><span class="%-label">.-</span><span class="%-label"></span>]],
-                    [[<span class="-label"></span><span class="%-label" id="]] .. match .. [[">]] .. match .. [[</span><span class="-label"></span>]]
+                    [[<span class="-label"></span><a href="]] .. linkpath .. [[" class="%-label" id="]] .. match .. [[">]] .. match .. [[</a><span class="-label"></span>]]
                 )
                 html_lines[i] = subbed
             end
@@ -84,7 +85,7 @@ return function (helptags_path)
             for match in line:gmatch([[<span class="Underlined">(.-)</span>]]) do
                 local subbed = string.gsub(line,
                     [[<span class="Underlined">.-</span>]],
-                    [[<a href="]] .. match .. [[" class="Underlined">]] .. match .. [[</a>]]
+                    [[<a href="]] .. match .. [[" class="-markup-link">]] .. match .. [[</a>]]
                 )
                 html_lines[i] = subbed
             end
