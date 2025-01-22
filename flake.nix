@@ -126,7 +126,7 @@
         ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
         pandoccmd "$TEMPFILE" "nixCats.nixos"
         ${GenCatTemplateDoc}/bin/GenCatTemplateDoc > $TEMPFILE
-        pandoccmd "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
+        pandoccmd "$TEMPFILE" "nixCats templates"
         cd "$ogpath"
         mkdir -p "$OUTDIR"
         cp -r "$TEMPDIR/doc/"* "$OUTDIR"
