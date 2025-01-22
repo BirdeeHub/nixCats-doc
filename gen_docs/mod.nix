@@ -21,4 +21,6 @@
 in
 writeShellScriptBin APPNAME ''
   cat ${optionsDoc.optionsCommonMark}
+  echo
+  cat ${./modulefootnote.md}
 ''

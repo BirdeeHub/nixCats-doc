@@ -41,9 +41,9 @@ print([[
 
 ---
 
-# Note for ZSH users:
+# Note for `zsh` users:
 
-If using zsh with `extendedglob` AND `nomatch` options turned on,
+If using `zsh` with `extendedglob` AND `nomatch` options turned on,
 you will need to escape the `#` in Nix Flake commands.
 
 Disabling one or both of them with `unsetopt` is a more long term solution.
