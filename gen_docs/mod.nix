@@ -11,6 +11,7 @@
       { _module.check = false; }
       (import "${nixCats}/utils/mkOpts.nix" {
         inherit isHomeManager;
+        inherit (nixCats) utils;
         nclib = import "${nixCats}/utils/lib.nix";
         defaultPackageName = "<defaultPackageName>";
       })
