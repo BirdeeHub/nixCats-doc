@@ -50,6 +50,8 @@ local builder = function(name)
             [[a.-markup-link:visited { color: #1a73e8; }]],
             [[a.-markup-link:hover { color: #155ab6; text-decoration: underline; }]],
             [[a.-markup-link:active { color: #003d99; }]],
+            [[a.-label { text-decoration: none; }]],
+            [[a.-label:hover { text-decoration: underline; }]],
             [[</style>]],
             [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
             [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
