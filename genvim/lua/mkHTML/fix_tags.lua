@@ -56,7 +56,7 @@ return function (helptags_path)
             for match in line:gmatch([[<span class="%-label"></span><span class="%-label">(.-)</span><span class="%-label"></span>]]) do
                 local matchname = tagToFile(match)
                 my_assert(matchname ~= nil, "no tag found for heading: " .. vim.inspect(match))
-                local linkpath = (new_tag_root or ".") .. "/" .. matchname or "" .. [[#]] .. match
+                local linkpath = (new_tag_root or ".") .. "/" .. (matchname or "") .. [[#]] .. match
                 local subbed = string.gsub(line,
                     [[<span class="%-label"></span><span class="%-label">.-</span><span class="%-label"></span>]],
                     [[<span class="-label"></span><a href="]] .. linkpath .. [[" class="%-label" id="]] .. match .. [[">]] .. match .. [[</a><span class="-label"></span>]]
