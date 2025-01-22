@@ -37,3 +37,14 @@ for _, v in ipairs(templatetable) do
   resmarkdown = resmarkdown .. toMD(v.name,v.path,v.description)
 end
 print(resmarkdown)
+print([[
+
+---
+
+# Note for ZSH users:
+
+If using zsh with `extendedglob` AND `nomatch` options turned on,
+you will need to escape the `#` in Nix Flake commands.
+
+Disabling one or both of them with `unsetopt` is a more long term solution.
+]])
