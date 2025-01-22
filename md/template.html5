@@ -69,7 +69,7 @@ $if(toc)$
     <a href="./TOC.html" style="margin-right: 10px;">TOC</a>
     <a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>
   </div>
-  <strong>Contents</strong><label for="contents">⊕</label>
+  <label for="contents">Contents</label>
   <input type="checkbox" id="contents">
   $table-of-contents$
 </nav>
