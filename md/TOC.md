@@ -11,7 +11,7 @@
 - [how to set up LSPs for nix, and how to manage mason on nixos](./nix_LSPS.html)
 - [some optional advice for managing overlays](./nix_overlays.html)
 
-## Generated nix API documentation
+## Nix API documentation
 - [Template List](./nixCats_templates.html)
 - [nixCats.utils set](./nixCats_utils.html)
 - [home-manager options](./nixCats_hm_options.html)
