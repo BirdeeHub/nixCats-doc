@@ -8,7 +8,8 @@ It requires no dependencies, or arguments to access this set.
 
 Most importantly it exports the main builder function, [utils.baseBuilder](#function-library-nixCats.utils.baseBuilder).
 
-The flake and expression based [templates](./nixCats_templates.html) show how to call this function directly, and use some of the other functions in this set.
+The flake and expression based [templates](./nixCats_templates.html) show how to call this function directly,
+and use some of the other functions in this set to construct various flake outputs.
 
 The modules use the main builder function internally and install the result.
 
