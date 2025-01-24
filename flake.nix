@@ -49,7 +49,8 @@
         pan_in=$3 pan_out=$4 pan_title=$5
         $(exit "$do_copy") && {
           mkdir -p $nix_out/css && \
-          cp ${mkdncss2}/public/css/* $nix_out/css
+          cp -f ${mkdncss2}/public/css/* $nix_out/css
+          cp -f ${./md/generated_doc_extra.css} $nix_out/css/generated_doc_extra.css
         } || true
         pandoc --katex \
           --from markdown+tex_math_single_backslash \
@@ -58,6 +59,7 @@
           --template ${./md/template.html5} \
           --css="./css/theme.css" \
           --css="./css/skylighting-solarized-theme.css" \
+          --css="./css/generated_doc_extra.css" \
           --toc \
           --wrap=none \
           -V pagetitle="$pan_title" \

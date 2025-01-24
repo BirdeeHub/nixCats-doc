@@ -59,12 +59,6 @@ $if(toc)$
   <a href="$return-url$">$if(return-text)$$return-text$$else$← Return$endif$</a><br>
   $endif$
   <div style="text-align: center;">
-    <style>
-      a { color: #1a73e8; text-decoration: none; }
-      a:visited { color: #1a73e8; }
-      a:hover { color: #155ab6; text-decoration: underline; }
-      a:active { color: #003d99; }
-    </style>
     <a href="./index.html" style="margin-right: 10px;">HOME</a>
     <a href="./TOC.html" style="margin-right: 10px;">TOC</a>
     <a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>
@@ -86,6 +80,29 @@ $if(return-url)$
 </p>
 </footer>
 $endif$
+<script>
+;(function() {
+  // fixes the clicky headings for the headings in the generated nix docs
+  var utils_func_selector = 'h2[id^="function-library-nixCats.utils"] code';
+  document.querySelectorAll(utils_func_selector).forEach(element => {
+    const parent = element.closest('h2');
+    if (parent && parent.id) {
+      const anchor = document.createElement('a');
+      anchor.href = "#" + parent.id;
+      anchor.innerHTML = element.innerHTML;
+      element.replaceWith(anchor);
+    }
+  });
+  var module_opt_selector = 'h2[id^="defaultpackagename."]';
+  document.querySelectorAll(module_opt_selector).forEach(element => {
+    const anchor = document.createElement('a');
+    anchor.href = "#" + element.id;
+    anchor.innerHTML = element.innerHTML;
+    element.innerHTML = '';
+    element.appendChild(anchor);
+  });
+})();
+</script>
 <script>
 ;(function() {
   // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.

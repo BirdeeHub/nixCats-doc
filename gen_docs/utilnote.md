@@ -15,3 +15,6 @@ The modules use the main builder function internally and install the result.
 
 It also contains the functions for creating modules,
 along with various other utilities for working with the nix side of Neovim or nixCats that you may want to use.
+
+---
+
