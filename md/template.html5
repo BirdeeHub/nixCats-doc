@@ -69,6 +69,15 @@ $if(toc)$
 </nav>
 $endif$
 
+<style>
+  h2[id^="function-library-nixCats.utils"] code {
+    color: blue;
+  }
+  h2[id^="defaultpackagename."] {
+    color: blue;
+  }
+</style>
+
 <main>
 $body$
 </main>
