@@ -92,7 +92,7 @@
 
           # fix link at the top of the readme
           TEMPFILE=$(mktemp)
-          sed '1,5s|# \[nixCats\](https://nixcats.org)|# [nixCats](https://github.com/BirdeeHub/nixCats-nvim)|' "${nixCats}/README.md" > "$TEMPFILE"
+          sed '1,5s|\[nixCats\](https://nixcats.org)|[nixCats](https://github.com/BirdeeHub/nixCats-nvim)|' "${nixCats}/README.md" > "$TEMPFILE"
 
           # run pandoc on the readme
           pandocGen "$TEMPFILE" "$out/index.html" "NIX CATEGORIES FOR NVIM"
