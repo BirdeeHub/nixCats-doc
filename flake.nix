@@ -90,13 +90,16 @@
           # use nvim headless and the config to generate html from nvim docs
           ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[$src]]"
 
+          # fix link at the top of the readme
+          TEMPFILE=$(mktemp)
+          sed '1,5s|# \[nixCats\](https://nixcats.org)|# [nixCats](https://github.com/BirdeeHub/nixCats-nvim)|' "${nixCats}/README.md" > "$TEMPFILE"
+
           # run pandoc on the readme
-          pandocGen "${nixCats}/README.md" "$out/index.html" "NIX CATEGORIES FOR NVIM"
+          pandocGen "$TEMPFILE" "$out/index.html" "NIX CATEGORIES FOR NVIM"
 
           # run pandoc on all pages that arent from the main nixCats repo
           pandocGen "${./md/TOC.md}" "$out/TOC.html" "nixCats.org TOC"
           
-          TEMPFILE=$(mktemp)
           ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_utils.html" "nixCats.utils API"
           ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
