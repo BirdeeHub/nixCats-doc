@@ -4,11 +4,11 @@ local function read_file_by_lines(filename)
     if not file then
         error("Could not open file: " .. filename)
     end
-    
+
     for line in file:lines() do
         table.insert(lines, line)
     end
-    
+
     file:close()
     return lines
 end

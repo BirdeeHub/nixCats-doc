@@ -53,6 +53,8 @@ local builder = function(name)
             [[a.-label { text-decoration: none; }]],
             [[a.-label:hover { text-decoration: underline; }]],
             [[</style>]],
+            [[<script src="./vim-help.js"></script>]],
+            [[<vim-help></vim-help>]],
             [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
             [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
             [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],

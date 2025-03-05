@@ -10,7 +10,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
-    # nixCats.url = "git+file:/home/birdee/Projects/nixCats-nvim?branch=dev";
     mkdncss = {
       url = "github:sindresorhus/github-markdown-css";
       flake = false;
@@ -68,6 +67,7 @@
       GenCatModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
       GenCatUtilDoc = pkgs.callPackage ./gen_docs/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
       GenCatTemplateDoc = pkgs.callPackage ./gen_docs/templates.nix ({ APPNAME = "GenCatTemplateDoc"; } // inputs);
+      GenWCLItags = pkgs.callPackage ./components inputs;
 
       docsite = pkgs.stdenv.mkDerivation {
         name = "genNixCatsDocs";
@@ -107,6 +107,9 @@
           ${GenCatTemplateDoc}/bin/GenCatTemplateDoc > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
           rm -f "$TEMPFILE"
+
+          cp -r ${./components/vim-help.js} $out/vim-help.js
+          cp -r ${GenWCLItags} $out/suggestions.json
         '';
       };
 
@@ -146,7 +149,7 @@
       '';
 
       # these generate markdown to stdout
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc;
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc GenWCLItags;
 
       # maybe one day I can get this to work
       inherit tovimdoc;

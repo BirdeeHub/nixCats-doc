@@ -51,6 +51,7 @@ $if(date)$
 <p class="date $if(toc)$before-toc$endif$"><time datetime="$date$">$date$</time></p>
 $endif$
 </blockquote>
+<script src="vim-help.js"></script>
 </header>
 
 $if(toc)$
@@ -79,6 +80,7 @@ $endif$
 </style>
 
 <main>
+<vim-help></vim-help>
 $body$
 </main>
 
