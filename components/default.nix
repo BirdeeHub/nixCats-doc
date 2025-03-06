@@ -45,10 +45,6 @@ in runCommandNoCC "tag_json_gen" {} ''
   TEMPDIR=$(mktemp -d)
   mkdir -p "$TEMPDIR"
   mkdir -p "$out"
-  cleanup() {
-    rm -rf "$TEMPDIR" || true
-  }
-  trap cleanup EXIT
   ${nix-doc} -j --category "utils" --description "nixCats.utils set documentation" --prefix "nixCats" --file ${nixCats}/utils/default.nix > $TEMPDIR/utils.json
   cp ${(optionsDoc true).optionsJSON}/share/doc/nixos/options.json $TEMPDIR/HM.json
   cp ${(optionsDoc false).optionsJSON}/share/doc/nixos/options.json $TEMPDIR/nixos.json
@@ -56,6 +52,6 @@ in runCommandNoCC "tag_json_gen" {} ''
   awk '{printf "  "} NR > 1 {printf ", "} {sub(/\.txt$/, ".html", $2); print "\"" $1 "\": \"./" $2 "\""}' ${nixCats}/nixCatsHelp/tags >> $TEMPDIR/tags.json
   echo "}" >> $TEMPDIR/tags.json
   ${luascript} $TEMPDIR $out/suggestions.json
-  rm -rf "$TEMPDIR" || true
   cp ${./vim-help.js} $out/vim-help.js
+  rm -rf "$TEMPDIR" || true
 ''
