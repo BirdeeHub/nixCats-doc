@@ -71,6 +71,7 @@ class AutocompleteComponent extends HTMLElement {
       </div>
     `;
     this.overlay = this.shadowRoot.querySelector('#overlay');
+    this.modal = this.shadowRoot.querySelector('#text-box');
     this.input = this.shadowRoot.querySelector('input');
     this.suggestionsList = this.shadowRoot.querySelector('#suggestions');
 
@@ -93,6 +94,12 @@ class AutocompleteComponent extends HTMLElement {
     this.handleInput()
     document.addEventListener('keydown', this.keyHandler.bind(this));
     this.input.addEventListener('input', this.handleInput.bind(this));
+    this.overlay.addEventListener('click', (_) => {
+      this.overlay.style.display = 'none';
+    });
+    this.modal.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
   }
 
   disconnectedCallback() {
