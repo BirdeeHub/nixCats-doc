@@ -15,7 +15,7 @@
     builtins.listToAttrs
     nixCats.utils.n2l.toLua
   ];
-  luaEnv = luajit.withPackages (lp: with lp; [ cjson inspect ]);
+  luaEnv = luajit.withPackages (lp: with lp; [ cjson ]);
   luascript = writeTextFile {
     name = "json_gen_lua";
     text = /*lua*/ ''
