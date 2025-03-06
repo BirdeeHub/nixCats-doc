@@ -170,10 +170,13 @@ class AutocompleteComponent extends HTMLElement {
       const match_commands = (q, cl) => cl.filter(item => new RegExp(`^${item}\\s+`).test(q)).length;
       var remaining = query.replace(/^[^\s]+\s+/, '').trimEnd();
       if (match_commands(query, ["h", "help"])) {
-        const filtered = this.suggestiondata.filter(item => 
-          item.toLowerCase().includes(remaining)
-        ).map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
-        return remaining.length ? filtered : this.suggestiondata.map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
+        if (remaining.length) {
+          return this.suggestiondata.filter(item => 
+            item.toLowerCase().includes(remaining)
+          ).map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
+        } else {
+          return this.suggestiondata.map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
+        }
       }
     }
     return [];
