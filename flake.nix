@@ -67,7 +67,7 @@
       GenCatModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
       GenCatUtilDoc = pkgs.callPackage ./gen_docs/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
       GenCatTemplateDoc = pkgs.callPackage ./gen_docs/templates.nix ({ APPNAME = "GenCatTemplateDoc"; } // inputs);
-      GenWCLItags = pkgs.callPackage ./components inputs;
+      GenComponents = pkgs.callPackage ./components inputs;
 
       docsite = pkgs.stdenv.mkDerivation {
         name = "genNixCatsDocs";
@@ -108,8 +108,7 @@
           pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
           rm -f "$TEMPFILE"
 
-          cp -r ${./components/vim-help.js} $out/vim-help.js
-          cp -r ${GenWCLItags} $out/suggestions.json
+          cp -r ${GenComponents}/* $out/
         '';
       };
 
@@ -149,7 +148,7 @@
       '';
 
       # these generate markdown to stdout
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc GenWCLItags;
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc GenComponents;
 
       # maybe one day I can get this to work
       inherit tovimdoc;

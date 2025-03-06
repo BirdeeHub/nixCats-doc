@@ -44,6 +44,7 @@
 in runCommandNoCC "tag_json_gen" {} ''
   TEMPDIR=$(mktemp -d)
   mkdir -p "$TEMPDIR"
+  mkdir -p "$out"
   cleanup() {
     rm -rf "$TEMPDIR" || true
   }
@@ -54,6 +55,7 @@ in runCommandNoCC "tag_json_gen" {} ''
   echo "{" > $TEMPDIR/tags.json
   awk '{printf "  "} NR > 1 {printf ", "} {sub(/\.txt$/, ".html", $2); print "\"" $1 "\": \"./" $2 "\""}' ${nixCats}/nixCatsHelp/tags >> $TEMPDIR/tags.json
   echo "}" >> $TEMPDIR/tags.json
-  ${luascript} $TEMPDIR $out
+  ${luascript} $TEMPDIR $out/suggestions.json
   rm -rf "$TEMPDIR" || true
+  cp ${./vim-help.js} $out/vim-help.js
 ''
