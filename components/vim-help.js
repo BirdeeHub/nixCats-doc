@@ -163,7 +163,7 @@ class AutocompleteComponent extends HTMLElement {
 
   filterSuggestions(query_in) {
     const query = query_in.trimStart().toLowerCase();
-    const filtered_cmds = this.commandStrings.filter(item => item.toLowerCase().startsWith(query) && item.toLowerCase() != query);
+    const filtered_cmds = this.commandStrings.filter(item => item.toLowerCase().startsWith(query));
     if (!query.length || !/\s/.test(query_in) && filtered_cmds.length) {
       return filtered_cmds;
     } else {
