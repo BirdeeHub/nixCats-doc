@@ -125,8 +125,8 @@ class AutocompleteComponent extends HTMLElement {
         event.preventDefault();
         this.selectSuggestion(focusedElement)
       }
-    } else if (event.key === 'Tab') {
-      this.handleTabKey(event);
+    } else if (event.key === 'Tab' || event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      this.handleMoveFocus(event);
     }
   }
 
@@ -206,18 +206,16 @@ class AutocompleteComponent extends HTMLElement {
     }
   }
 
-  handleTabKey(event) {
+  handleMoveFocus(event) {
     event.preventDefault(); // Prevent the default tab behavior
     const items = this.suggestionsList.querySelectorAll('li');
-    if (event.shiftKey) {
-      // Move focus backwards
+    if (event.shiftKey && event.key === 'Tab' || event.key === 'ArrowUp') {
       if (this.selectedIndex >= 0) {
         this.selectedIndex--;
       } else {
         this.selectedIndex = items.length - 1;
       }
     } else {
-      // Move focus forwards
       if (this.selectedIndex < items.length - 1) {
         this.selectedIndex++;
       } else {
@@ -229,7 +227,6 @@ class AutocompleteComponent extends HTMLElement {
     items.forEach(item => item.classList.remove('selected'));
     if (this.selectedIndex >= 0) {
       items[this.selectedIndex].classList.add('selected');
-      // Move the focus to the selected item
       items[this.selectedIndex].focus();
     } else {
       this.input.focus();
