@@ -22,9 +22,11 @@ class AutocompleteComponent extends HTMLElement {
           padding: 1rem;
           border-radius: 8px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
         }
         input {
-          width: 100%;
           padding: 0.5rem;
           font-size: 1rem;
         }
@@ -48,13 +50,13 @@ class AutocompleteComponent extends HTMLElement {
           background-color: #a0a0a0;
           color: black;
         }
-        .theme {
+        .themewcli {
           background-color: black;
           color: white;
           border-color: white;
         }
         @media (prefers-color-scheme: light) {
-          .theme.adaptive {
+          .themewcli.adaptive {
             background-color: whitesmoke;
             color: black;
             border-color: black;
@@ -62,7 +64,7 @@ class AutocompleteComponent extends HTMLElement {
         }
       </style>
       <div id="overlay">
-        <div id="text-box" class="theme adaptive">
+        <div id="text-box" class="themewcli adaptive">
           <ul id="suggestions"></ul>
           <input type="text" placeholder="help nixCats.*"/>
         </div>
