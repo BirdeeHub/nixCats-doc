@@ -166,7 +166,8 @@ class AutocompleteComponent extends HTMLElement {
     if (!query.length || !/\s/.test(query) && filtered_cmds.length) {
       return filtered_cmds;
     } else {
-      if (["h", "help"].filter(item => new RegExp(`^${item}\\s+`).test(query)).length) {
+      const match_commands = (q, cl) => cl.filter(item => new RegExp(`^${item}\\s+`).test(q)).length;
+      if (match_commands(query, ["h", "help"])) {
         const filtered = this.suggestiondata.filter(item => 
           item.toLowerCase().includes(query.replace(/^[^\s]+\s+/, ''))
         ).map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
