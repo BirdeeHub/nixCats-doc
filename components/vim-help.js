@@ -173,7 +173,7 @@ class AutocompleteComponent extends HTMLElement {
         const filtered = this.suggestiondata.filter(item => 
           item.toLowerCase().includes(remaining)
         ).map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
-        return remaining.length ? filtered : this.suggestiondata
+        return remaining.length ? filtered : this.suggestiondata.map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
       }
     }
     return [];
