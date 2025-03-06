@@ -130,7 +130,7 @@ class AutocompleteComponent extends HTMLElement {
   }
 
   handleInput() {
-    const suggestions = this.filterSuggestions(this.input.value.toLowerCase());
+    const suggestions = this.filterSuggestions(this.input.value);
     this.displaySuggestions(suggestions);
     if (!suggestions.length && this.input.value.length) {
       this.input.style.borderColor = 'red';
@@ -161,15 +161,17 @@ class AutocompleteComponent extends HTMLElement {
     }
   }
 
-  filterSuggestions(query) {
+  filterSuggestions(query_in) {
+    const query = query_in.trim().toLowerCase();
     const filtered_cmds = this.commandStrings.filter(item => item.toLowerCase().startsWith(query));
     if (!query.length || !/\s/.test(query) && filtered_cmds.length) {
       return filtered_cmds;
     } else {
       const match_commands = (q, cl) => cl.filter(item => new RegExp(`^${item}\\s+`).test(q)).length;
+      const remaining = query.replace(/^[^\s]+\s+/, '');
       if (match_commands(query, ["h", "help"])) {
         const filtered = this.suggestiondata.filter(item => 
-          item.toLowerCase().includes(query.replace(/^[^\s]+\s+/, ''))
+          item.toLowerCase().includes(remaining)
         ).map(item => query.replace(/^([^\s]+\s+).*/, (_, prefix) => prefix + item));
         return query.length ? filtered : []
       }
