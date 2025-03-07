@@ -92,44 +92,49 @@ class AutocompleteComponent extends HTMLElement {
       .catch(error => console.error('Error loading the JSON:', error));
 
     this.selectedIndex = -1;
+    this.keyHandler = this.keyHandler.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.show = this.show.bind(this);
+    this.hide = this.hide.bind(this);
   }
 
   connectedCallback() {
     this.handleInput()
-    document.addEventListener('keydown', this.keyHandler.bind(this));
-    this.input.addEventListener('input', this.handleInput.bind(this));
-    this.overlay.addEventListener('click', (_) => {
-      this.overlay.style.display = 'none';
-    });
-    this.modal.addEventListener('click', (event) => {
-      event.stopPropagation();
-    });
+    document.addEventListener('keydown', this.keyHandler);
+    this.input.addEventListener('input', this.handleInput);
+    this.overlay.addEventListener('click', this.hide);
+    this.modal.addEventListener('click', this.stopPropagationHandler);
   }
 
   disconnectedCallback() {
-    document.removeEventListener('keydown', this.keyHandler.bind(this));
-    this.input.removeEventListener('input', this.handleInput.bind(this));
+    document.removeEventListener('keydown', this.keyHandler);
+    this.input.removeEventListener('input', this.handleInput);
+    this.overlay.removeEventListener('click', this.hide);
+    this.modal.removeEventListener('click', this.stopPropagationHandler);
   }
 
   show() {
-    if (!this.overlay.style.display || this.overlay.style.display === 'none') {
-      this.overlay.style.display = 'flex';
-      setTimeout(() => this.input.focus(), 0);
-    }
+    this.overlay.style.display = 'flex';
+    setTimeout(() => this.input.focus(), 0);
+  }
+  hide() {
+    this.overlay.style.display = 'none';
+  }
+  stopPropagationHandler(event) {
+    event.stopPropagation();
   }
 
   keyHandler(event) {
     if (event.key === ':') {
       if (!this.overlay.style.display || this.overlay.style.display === 'none') {
         event.preventDefault();
-        this.overlay.style.display = 'flex';
-        setTimeout(() => this.input.focus(), 0);
+        this.show();
       }
     } else if (event.key === 'Escape') {
-      this.overlay.style.display = 'none';
+      this.hide();
     } else if (event.key === 'q') {
       if (this.shadowRoot.activeElement !== this.input) {
-        this.overlay.style.display = 'none';
+        this.hide();
       }
     } else if (event.key === 'Enter') {
       const focusedElement = this.shadowRoot.activeElement;
