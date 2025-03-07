@@ -116,6 +116,10 @@ class AutocompleteComponent extends HTMLElement {
       }
     } else if (event.key === 'Escape') {
       this.overlay.style.display = 'none';
+    } else if (event.key === 'q') {
+      if (this.shadowRoot.activeElement !== this.input) {
+        this.overlay.style.display = 'none';
+      }
     } else if (event.key === 'Enter') {
       const focusedElement = this.shadowRoot.activeElement;
       if (focusedElement === this.input) {
