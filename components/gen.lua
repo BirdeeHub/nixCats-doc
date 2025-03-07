@@ -29,9 +29,9 @@ local function link_strip(name)
   return string.lower(name:gsub("[^%w%.]", ""))
 end
 
-local result = load_json(tempdir.."/tags.json")
-for k, v in pairs(nixinfo.templates) do
-  result[k] = v
+local result = nixinfo.templates
+for k, v in pairs(load_json(tempdir.."/tags.json")) do
+  result[k] = v .. "#" .. k
 end
 for _, v in ipairs(load_json(tempdir.."/utils.json").entries) do
   result["utils."..v.name] = "./nixCats_utils.html#function-library-nixCats.utils." .. v.name
