@@ -41,10 +41,14 @@ class AutocompleteComponent extends HTMLElement {
           border-radius: 4px;
           max-height: 150px;
           overflow-y: auto;
+          text-align: left;
+          font-size: 1rem;
         }
         #suggestions li {
           padding: 0.5rem;
           cursor: pointer;
+          text-align: inherit;
+          font-size: inherit;
         }
         #suggestions li:hover, #suggestions .selected {
           background-color: #a0a0a0;
