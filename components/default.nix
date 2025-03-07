@@ -41,7 +41,7 @@
     };
   in nixosOptionsDoc { inherit (eval'd) options; };
   nix-doc = "${nixdoc.packages.${system}.default}/bin/nixdoc";
-in runCommandNoCC "tag_json_gen" {} ''
+in runCommandNoCC "gen_web_component" {} ''
   TEMPDIR=$(mktemp -d)
   mkdir -p "$TEMPDIR"
   mkdir -p "$out"

@@ -148,7 +148,10 @@
       '';
 
       # these generate markdown to stdout
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc GenComponents;
+      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc;
+
+      # this makes a fun web component that emulates vim :help search
+      inherit GenComponents;
 
       # maybe one day I can get this to work
       inherit tovimdoc;
