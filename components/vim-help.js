@@ -107,6 +107,13 @@ class AutocompleteComponent extends HTMLElement {
     this.input.removeEventListener('input', this.handleInput.bind(this));
   }
 
+  show() {
+    if (!this.overlay.style.display || this.overlay.style.display === 'none') {
+      this.overlay.style.display = 'flex';
+      setTimeout(() => this.input.focus(), 0);
+    }
+  }
+
   keyHandler(event) {
     if (event.key === ':') {
       if (!this.overlay.style.display || this.overlay.style.display === 'none') {
