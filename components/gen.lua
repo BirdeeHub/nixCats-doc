@@ -4,25 +4,17 @@ local nixinfo = require("nixinfo")
 
 local cjson = require('cjson.safe')
 
--- Function to read a file and return its content
-local function read_file(filename)
-  local file = assert(io.open(filename, "r"))  -- Open the file for reading
-  local content = file:read("*a")  -- Read the entire content
-  file:close()  -- Close the file
-  return content
-end
-
--- Function to read a file and return its content
 local function write_file(filename, content)
-  local file = assert(io.open(filename, "w"))  -- Open the file for reading
-  file:write(content)  -- Read the entire content
-  file:close()  -- Close the file
+  local file = assert(io.open(filename, "w"))
+  file:write(content)
+  file:close()
 end
 
--- Function to load JSON from a file
 local function load_json(filename)
-  local content = read_file(filename)  -- Read file content
-  return cjson.decode(content)  -- Decode JSON into a Lua table
+  local file = assert(io.open(filename, "r"))
+  local content = file:read("*a")
+  file:close()
+  return cjson.decode(content)
 end
 
 local function link_strip(name)
