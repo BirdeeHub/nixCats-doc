@@ -18,6 +18,7 @@ local order = {
     "home-manager",
     "nixos",
     "nixExpressionFlakeOutputs",
+    "flakeless",
     "example",
     "kickstart-nvim",
     "LazyVim",
