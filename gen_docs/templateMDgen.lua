@@ -4,7 +4,6 @@ local function write_file(filename, content)
   file:close()
 end
 
-local nixinfo = require("nixinfo")
 local function toMD(name,description)
   local res = ""
   local link = (name == "default" and "https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/fresh") or ("https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/" .. name)
@@ -15,6 +14,7 @@ local function toMD(name,description)
   return res
 end
 
+local templates_nix = require("templates_nix")
 local order = {
     "default",
     "luaUtils",
@@ -27,17 +27,17 @@ local order = {
     "LazyVim",
 }
 
-local templatetable = {}
+local in_order = {}
 for _, v in ipairs(order) do
-    table.insert(templatetable, nixinfo.templates[v])
-    nixinfo.templates[v] = nil
+    table.insert(in_order, templates_nix[v])
+    templates_nix[v] = nil
 end
-for _, v in pairs(nixinfo.templates) do
-  table.insert(templatetable, v)
+for _, v in pairs(templates_nix) do
+  table.insert(in_order, v)
 end
 
 local resmarkdown = ""
-for _, v in ipairs(templatetable) do
+for _, v in ipairs(in_order) do
   resmarkdown = resmarkdown .. toMD(v.name,v.description)
 end
 resmarkdown = resmarkdown .. [[

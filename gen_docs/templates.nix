@@ -12,8 +12,8 @@
     name = "GenTemplateDocsLua";
     text = /*lua*/ ''
       #!${luajit.interpreter}
-      package.preload["nixinfo"] = function()
-        return { nixCats = "${nixCats}", templates = ${templates} }
+      package.preload["templates_nix"] = function()
+        return ${templates}
       end
       dofile("${./templateMDgen.lua}")
     '';
