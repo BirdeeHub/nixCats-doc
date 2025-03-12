@@ -116,7 +116,7 @@
         pandoccmd ${UtilDoc} "nixCats.utils"
         pandoccmd ${HMdoc} "nixCats.home-manager"
         pandoccmd ${ModDoc} "nixCats.nixos"
-        pandoccmd ${TemplateDoc} "nixCats templates"
+        pandoccmd ${TemplateDoc} "nixCats.templates"
         mkdir -p "$out"
         cp -r "$TEMPDIR/doc/"* "$out"
       '';
