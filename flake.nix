@@ -83,7 +83,7 @@
         }
 
         # use nvim headless and the config to generate html from nvim docs
-        ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[${nixCats}/nixCatsHelp]]"
+        ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_src = [[${nixCats}/nixCatsHelp]]; vim.g.nixCats_doc_out = [[$out]]"
 
         # fix link at the top of the readme
         TEMPFILE=$(mktemp)
