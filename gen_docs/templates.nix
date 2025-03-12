@@ -18,5 +18,4 @@ in writeTextFile {
     dofile("${./templateMDgen.lua}")
   '';
   executable = true;
-  destination = "/bin/${APPNAME}";
 }

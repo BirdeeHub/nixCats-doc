@@ -1,14 +1,11 @@
 local nixinfo = require("nixinfo")
 local function toMD(name,path,description)
   local res = ""
-  local srclen = #nixinfo.nixCats
-  if path:sub(1, srclen) == nixinfo.nixCats then
-    local link = "https://github.com/BirdeeHub/nixCats-nvim/tree/main" .. path:sub(srclen + 1)
-    local initcmd = (name == "default" and "nix flake init -t github:BirdeeHub/nixCats-nvim") or ("nix flake init -t github:BirdeeHub/nixCats-nvim#" .. name)
-    res = "# [" .. name .. "](" .. link .. ")\n\n"
-    res = res .. "`" .. initcmd .. "`\n\n"
-    res = res .. description .. "\n\n"
-  end
+  local link = (name == "default" and "https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/fresh") or ("https://github.com/BirdeeHub/nixCats-nvim/tree/main/templates/" .. name)
+  local initcmd = (name == "default" and "nix flake init -t github:BirdeeHub/nixCats-nvim") or ("nix flake init -t github:BirdeeHub/nixCats-nvim#" .. name)
+  res = "# [" .. name .. "](" .. link .. ")\n\n"
+  res = res .. "`" .. initcmd .. "`\n\n"
+  res = res .. description .. "\n\n"
   return res
 end
 

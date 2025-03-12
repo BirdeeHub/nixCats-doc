@@ -104,7 +104,7 @@
           pandocGen2 "$TEMPFILE" "$out/nixCats_hm_options.html" "nixCats home-manager options"
           ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
-          ${GenCatTemplateDoc}/bin/GenCatTemplateDoc > $TEMPFILE
+          ${GenCatTemplateDoc} > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
           rm -f "$TEMPFILE"
 
