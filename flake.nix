@@ -145,7 +145,6 @@
       genvim = genvim.override (prev: {
         packageDefinitions = {
           genvim = args: {
-            settings = {};
             categories = {
               general = true;
               killAfter = false;

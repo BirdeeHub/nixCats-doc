@@ -18,7 +18,6 @@
   };
   packageDefinitions = {
     genvim = {pkgs , ... }: {
-      settings = {};
       categories = {
         killAfter = true;
         general = true;
