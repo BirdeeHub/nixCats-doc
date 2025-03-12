@@ -6,7 +6,8 @@
         {
           plugin = onedark-nvim;
           pre = true;
-          config.lua = /*lua*/ ''
+          type = "lua";
+          config = /*lua*/ ''
             -- dark, darker, cool, deep, warm, warmer, light
             require('onedark').setup { style = 'darker', }
             require('onedark').load()
