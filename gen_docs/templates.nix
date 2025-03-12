@@ -1,5 +1,4 @@
-{ APPNAME
-, nixCats
+{ nixCats
 , luajit
 , writeTextFile
 , ...
@@ -9,7 +8,7 @@
     name = n;
   }) nixCats.utils.templates);
 in writeTextFile {
-  name = APPNAME;
+  name = "GenCatTemplateDoc";
   text = /*lua*/ ''
     #!${luajit.interpreter}
     package.preload["nixinfo"] = function()

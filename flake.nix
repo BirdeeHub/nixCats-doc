@@ -63,10 +63,10 @@
           --output "$pan_out" \
           "$(realpath "$pan_in")"
       '';
-      GenCatHMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ APPNAME = "GenCatHMdoc"; isHomeManager = true; } // inputs);
-      GenCatModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ APPNAME = "GenCatModDoc"; isHomeManager = false; } // inputs);
-      GenCatUtilDoc = pkgs.callPackage ./gen_docs/util.nix ({ APPNAME = "GenCatUtilDoc"; } // inputs);
-      GenCatTemplateDoc = pkgs.callPackage ./gen_docs/templates.nix ({ APPNAME = "GenCatTemplateDoc"; } // inputs);
+      GenCatHMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
+      GenCatModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);
+      GenCatUtilDoc = pkgs.callPackage ./gen_docs/util.nix inputs;
+      GenCatTemplateDoc = pkgs.callPackage ./gen_docs/templates.nix inputs;
       GenComponents = pkgs.callPackage ./components inputs;
 
       docsite = pkgs.stdenv.mkDerivation {
@@ -98,11 +98,11 @@
           # run pandoc on all pages that arent from the main nixCats repo
           pandocGen "${./md/TOC.md}" "$out/TOC.html" "nixCats.org TOC"
           
-          ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
+          ${GenCatUtilDoc} > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_utils.html" "nixCats.utils API"
-          ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
+          ${GenCatHMdoc} > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_hm_options.html" "nixCats home-manager options"
-          ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
+          ${GenCatModDoc} > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
           ${GenCatTemplateDoc} > $TEMPFILE
           pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
@@ -124,13 +124,13 @@
         TEMPFILE="$TEMPDIR/temp.md"
         ogpath="$(pwd)"
         cd "$TEMPDIR"
-        ${GenCatUtilDoc}/bin/GenCatUtilDoc > $TEMPFILE
+        ${GenCatUtilDoc} > $TEMPFILE
         pandoccmd "$TEMPFILE" "nixCats.utils"
-        ${GenCatHMdoc}/bin/GenCatHMdoc > $TEMPFILE
+        ${GenCatHMdoc} > $TEMPFILE
         pandoccmd "$TEMPFILE" "nixCats.home-manager"
-        ${GenCatModDoc}/bin/GenCatModDoc > $TEMPFILE
+        ${GenCatModDoc} > $TEMPFILE
         pandoccmd "$TEMPFILE" "nixCats.nixos"
-        ${GenCatTemplateDoc}/bin/GenCatTemplateDoc > $TEMPFILE
+        ${GenCatTemplateDoc} > $TEMPFILE
         pandoccmd "$TEMPFILE" "nixCats templates"
         cd "$ogpath"
         mkdir -p "$OUTDIR"

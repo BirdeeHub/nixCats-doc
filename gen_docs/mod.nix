@@ -1,9 +1,8 @@
-{ APPNAME
-, isHomeManager ? false
+{ isHomeManager ? false
 , nixCats
 , lib
 , nixosOptionsDoc
-, writeShellScriptBin
+, writeShellScript
 , ...
 }: let
   eval'd = lib.evalModules {
@@ -19,7 +18,7 @@
   };
   optionsDoc = nixosOptionsDoc { inherit (eval'd) options; };
 in
-writeShellScriptBin APPNAME ''
+writeShellScript (if isHomeManager then "GenCatHMdoc" else "GenCatModDoc") ''
   cat ${optionsDoc.optionsCommonMark}
   echo
   cat ${./modulefootnote.md}

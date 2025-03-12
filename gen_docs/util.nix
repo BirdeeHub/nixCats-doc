@@ -1,13 +1,12 @@
-{ APPNAME
-, nixCats
+{ nixCats
 , nixdoc
 , system
-, writeShellScriptBin
+, writeShellScript
 , ...
 }: let
   docfile = "${nixCats}/utils/default.nix";
 in
-writeShellScriptBin APPNAME ''
+writeShellScript "GenCatUtilDoc" ''
   cat ${./utilnote.md}
   echo
   ${nixdoc.packages.${system}.default}/bin/nixdoc --category "utils" --description "nixCats.utils set documentation" --file ${docfile} --prefix "nixCats"
