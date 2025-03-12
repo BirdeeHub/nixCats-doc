@@ -105,23 +105,20 @@
       '';
 
       # maybe one day I can get this to work
-      tovimdoc = pkgs.writeShellScriptBin "tovimdoc" ''
-        OUTDIR="''${1:-"."}"
+      tovimdoc = pkgs.runCommandNoCC "tovimdoc" {} ''
         pandoccmd () {
           ${pkgs.panvimdoc}/bin/panvimdoc --toc false --dedup-subheadings true --project-name "$2" --input-file "$1"
         }
         TEMPDIR="$(mktemp -d)"
         mkdir -p "$TEMPDIR"
         mkdir -p "$TEMPDIR/doc"
-        ogpath="$(pwd)"
         cd "$TEMPDIR"
         pandoccmd ${UtilDoc} "nixCats.utils"
         pandoccmd ${HMdoc} "nixCats.home-manager"
         pandoccmd ${ModDoc} "nixCats.nixos"
         pandoccmd ${TemplateDoc} "nixCats templates"
-        cd "$ogpath"
-        mkdir -p "$OUTDIR"
-        cp -r "$TEMPDIR/doc/"* "$OUTDIR"
+        mkdir -p "$out"
+        cp -r "$TEMPDIR/doc/"* "$out"
       '';
     in {
       # we built the drv. Now we have to get it out of the store. Instead of installing the drv,
