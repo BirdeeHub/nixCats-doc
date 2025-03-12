@@ -1,8 +1,3 @@
--- dark, darker, cool, deep, warm, warmer, light
-require('onedark').setup { style = 'darker', }
-require('onedark').load()
-vim.cmd.colorscheme('onedark')
-
 -- NOTE: make sure all failures exit nvim with a
 -- non-zero exit code if killAfter is true
 -- so that it actually prints the error

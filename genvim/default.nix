@@ -3,7 +3,16 @@
   categoryDefinitions = { pkgs, settings, categories, name, ... }: {
     startupPlugins = {
       general = with pkgs.vimPlugins; [
-        onedark-nvim
+        {
+          plugin = onedark-nvim;
+          pre = true;
+          config.lua = /*lua*/ ''
+            -- dark, darker, cool, deep, warm, warmer, light
+            require('onedark').setup { style = 'darker', }
+            require('onedark').load()
+            vim.cmd.colorscheme('onedark')
+          '';
+        }
         (nvim-treesitter.withPlugins (plugins: with plugins; [
           vimdoc
           vim
