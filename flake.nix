@@ -21,14 +21,20 @@
     nixdoc.url = "github:nix-community/nixdoc";
   };
   outputs = { nixpkgs, nixCats, mkdncss, mkdncss2, ... }@inputs: let
-    forSys = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.all;
+    inherit (nixpkgs) lib;
+    forSys = lib.genAttrs lib.platforms.all;
   in {
     packages = forSys (system: let
-      genvim = import ./genvim { inherit system inputs; };
       pkgs = import nixpkgs { inherit system; };
+      genvim = import ./genvim { inherit system inputs; };
+      HMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
+      ModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);
+      UtilDoc = pkgs.callPackage ./gen_docs/util.nix inputs;
+      TemplateDoc = pkgs.callPackage ./gen_docs/templates.nix inputs;
+      WebComponents = pkgs.callPackage ./components inputs;
 
       pandocCMD = pkgs.writeShellScript "pandocCMD" ''
-        export PATH="${nixpkgs.lib.makeBinPath (with pkgs; [ coreutils pandoc ])}:$PATH"
+        export PATH="${lib.makeBinPath (with pkgs; [ coreutils pandoc ])}:$PATH"
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
         $(exit "$do_copy") && {
@@ -43,7 +49,7 @@
       '';
 
       pandocCMD2 = pkgs.writeShellScript "pandocCMD" ''
-        export PATH="${nixpkgs.lib.makeBinPath (with pkgs; [ coreutils pandoc haskellPackages.pandoc-sidenote ])}:$PATH"
+        export PATH="${lib.makeBinPath (with pkgs; [ coreutils pandoc haskellPackages.pandoc-sidenote ])}:$PATH"
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
         $(exit "$do_copy") && {
@@ -63,11 +69,6 @@
           --output "$pan_out" \
           "$(realpath "$pan_in")"
       '';
-      HMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
-      ModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);
-      UtilDoc = pkgs.callPackage ./gen_docs/util.nix inputs;
-      TemplateDoc = pkgs.callPackage ./gen_docs/templates.nix inputs;
-      WebComponents = pkgs.callPackage ./components inputs;
 
       docsite = pkgs.runCommandNoCC "genNixCatsDocs" {} ''
         export HOME=$(mktemp -d)
