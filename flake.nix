@@ -134,7 +134,7 @@
         find "$finaloutpath" -type f ! -iname "*.sh" -exec chmod 640 {} +
       '';
 
-      # these generate markdown to stdout
+      # generated markdown
       inherit HMdoc ModDoc UtilDoc TemplateDoc;
 
       # this makes a fun web component that emulates vim :help search
