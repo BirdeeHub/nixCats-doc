@@ -63,54 +63,46 @@
           --output "$pan_out" \
           "$(realpath "$pan_in")"
       '';
-      GenCatHMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
-      GenCatModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);
-      GenCatUtilDoc = pkgs.callPackage ./gen_docs/util.nix inputs;
-      GenCatTemplateDoc = pkgs.callPackage ./gen_docs/templates.nix inputs;
-      GenComponents = pkgs.callPackage ./components inputs;
+      HMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
+      ModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);
+      UtilDoc = pkgs.callPackage ./gen_docs/util.nix inputs;
+      TemplateDoc = pkgs.callPackage ./gen_docs/templates.nix inputs;
+      WebComponents = pkgs.callPackage ./components inputs;
 
-      docsite = pkgs.stdenv.mkDerivation {
-        name = "genNixCatsDocs";
-        src = "${nixCats}/nixCatsHelp";
-        buildPhase = /* bash */ ''
-          export HOME=$(mktemp -d)
-          do_copy=0
-          pandocGen() {
-            ${pandocCMD} "$do_copy" "$out" "$@"
-            do_copy=1
-          }
-          do_copy_2=0
-          pandocGen2() {
-            ${pandocCMD2} "$do_copy_2" "$out" "$@"
-            do_copy=1
-          }
+      docsite = pkgs.runCommandNoCC "genNixCatsDocs" {} ''
+        export HOME=$(mktemp -d)
+        do_copy=0
+        pandocGen() {
+          ${pandocCMD} "$do_copy" "$out" "$@"
+          do_copy=1
+        }
+        do_copy_2=0
+        pandocGen2() {
+          ${pandocCMD2} "$do_copy_2" "$out" "$@"
+          do_copy=1
+        }
 
-          # use nvim headless and the config to generate html from nvim docs
-          ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[$src]]"
+        # use nvim headless and the config to generate html from nvim docs
+        ${genvim}/bin/genvim --headless --cmd "lua vim.g.nixCats_doc_out = [[$out]]; vim.g.nixCats_doc_src = [[${nixCats}/nixCatsHelp]]"
 
-          # fix link at the top of the readme
-          TEMPFILE=$(mktemp)
-          sed '1,5s|\[nixCats\](https://nixcats.org)|[nixCats](https://github.com/BirdeeHub/nixCats-nvim)|' "${nixCats}/README.md" > "$TEMPFILE"
+        # fix link at the top of the readme
+        TEMPFILE=$(mktemp)
+        sed '1,5s|\[nixCats\](https://nixcats.org)|[nixCats](https://github.com/BirdeeHub/nixCats-nvim)|' '${nixCats}/README.md' > "$TEMPFILE"
 
-          # run pandoc on the readme
-          pandocGen "$TEMPFILE" "$out/index.html" "NIX CATEGORIES FOR NVIM"
+        # run pandoc on the readme
+        pandocGen "$TEMPFILE" "$out/index.html" "NIX CATEGORIES FOR NVIM"
+        rm -f "$TEMPFILE"
 
-          # run pandoc on all pages that arent from the main nixCats repo
-          pandocGen "${./md/TOC.md}" "$out/TOC.html" "nixCats.org TOC"
-          
-          ${GenCatUtilDoc} > $TEMPFILE
-          pandocGen2 "$TEMPFILE" "$out/nixCats_utils.html" "nixCats.utils API"
-          ${GenCatHMdoc} > $TEMPFILE
-          pandocGen2 "$TEMPFILE" "$out/nixCats_hm_options.html" "nixCats home-manager options"
-          ${GenCatModDoc} > $TEMPFILE
-          pandocGen2 "$TEMPFILE" "$out/nixCats_nixos_options.html" "nixCats nixos options"
-          ${GenCatTemplateDoc} > $TEMPFILE
-          pandocGen2 "$TEMPFILE" "$out/nixCats_templates.html" "nixCats templates"
-          rm -f "$TEMPFILE"
+        # run pandoc on all pages that arent from the main nixCats repo
+        pandocGen '${./md/TOC.md}' "$out/TOC.html" "nixCats.org TOC"
 
-          cp -r ${GenComponents}/* $out/
-        '';
-      };
+        pandocGen2 ${UtilDoc} "$out/nixCats_utils.html" "nixCats.utils API"
+        pandocGen2 ${HMdoc} "$out/nixCats_hm_options.html" "nixCats home-manager options"
+        pandocGen2 ${ModDoc} "$out/nixCats_nixos_options.html" "nixCats nixos options"
+        pandocGen2 ${TemplateDoc} "$out/nixCats_templates.html" "nixCats templates"
+
+        cp -r ${WebComponents}/* $out/
+      '';
 
       # maybe one day I can get this to work
       tovimdoc = pkgs.writeShellScriptBin "tovimdoc" ''
@@ -121,17 +113,12 @@
         TEMPDIR="$(mktemp -d)"
         mkdir -p "$TEMPDIR"
         mkdir -p "$TEMPDIR/doc"
-        TEMPFILE="$TEMPDIR/temp.md"
         ogpath="$(pwd)"
         cd "$TEMPDIR"
-        ${GenCatUtilDoc} > $TEMPFILE
-        pandoccmd "$TEMPFILE" "nixCats.utils"
-        ${GenCatHMdoc} > $TEMPFILE
-        pandoccmd "$TEMPFILE" "nixCats.home-manager"
-        ${GenCatModDoc} > $TEMPFILE
-        pandoccmd "$TEMPFILE" "nixCats.nixos"
-        ${GenCatTemplateDoc} > $TEMPFILE
-        pandoccmd "$TEMPFILE" "nixCats templates"
+        pandoccmd ${UtilDoc} "nixCats.utils"
+        pandoccmd ${HMdoc} "nixCats.home-manager"
+        pandoccmd ${ModDoc} "nixCats.nixos"
+        pandoccmd ${TemplateDoc} "nixCats templates"
         cd "$ogpath"
         mkdir -p "$OUTDIR"
         cp -r "$TEMPDIR/doc/"* "$OUTDIR"
@@ -148,10 +135,10 @@
       '';
 
       # these generate markdown to stdout
-      inherit GenCatHMdoc GenCatModDoc GenCatUtilDoc GenCatTemplateDoc;
+      inherit HMdoc ModDoc UtilDoc TemplateDoc;
 
       # this makes a fun web component that emulates vim :help search
-      inherit GenComponents;
+      inherit WebComponents;
 
       # maybe one day I can get this to work
       inherit tovimdoc;
