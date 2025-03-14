@@ -19,9 +19,7 @@ jobs:
       - name: Update Site
         run: |
           mkdir -p ./_site
-          cd ./_site
-          nix run --refresh --show-trace --no-write-lock-file ..
-          cd ..
+          nix run --refresh --show-trace --no-write-lock-file .. -- ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
