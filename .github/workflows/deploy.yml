@@ -18,8 +18,9 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@main
       - name: Update Site
         run: |
-          mkdir -p _site
+          mkdir -p ./_site
           nix run --refresh --show-trace --no-write-lock-file -- "$(realpath ./_site)"
+          ls -R ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
