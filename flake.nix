@@ -1,8 +1,8 @@
 {
   description = ''
     Useage:
-    nix run --refresh --no-write-lock-file --show-trace .
-    nix run --refresh --no-write-lock-file --show-trace . -- "$SOMEOUTPATH"
+    nix run github:BirdeeHub/nixCats-doc -- $OUTPATH
+    nix run file --override-input nixCats /path/to/local/nixCats-nvim github:BirdeeHub/nixCats-doc
 
     generates an html + css site from the nixCats documentation
     to either the current directory or some other given path.
