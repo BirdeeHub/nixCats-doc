@@ -3,7 +3,7 @@ Generates [nixcats.org](https://nixcats.org), the documentation site for [nixCat
 ```bash
 nix run github:BirdeeHub/nixCats-doc -- $OUTPATH
 
-nix run file --override-input nixCats /path/to/local/nixCats-nvim github:BirdeeHub/nixCats-doc -- $OUTPATH
+nix run --override-input nixCats /path/to/local/nixCats-nvim github:BirdeeHub/nixCats-doc -- $OUTPATH
 
 ./test.sh $OUTPATH /path/to/local/nixCats-nvim
 
