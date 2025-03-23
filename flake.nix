@@ -43,6 +43,7 @@
         } || true
         pandoc --standalone \
           --template ${./md/github-markdown-dark.html} \
+          --css="./css/github-markdown-dark.css" \
           -V title="$pan_title" \
           -o "$pan_out" \
           "$(realpath "$pan_in")"
