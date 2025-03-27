@@ -23,6 +23,7 @@ local order = {
     "flakeless",
     "nixExpressionFlakeOutputs",
     "example",
+    "simple",
     "kickstart-nvim",
     "LazyVim",
 }
