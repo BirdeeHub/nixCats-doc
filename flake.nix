@@ -26,7 +26,7 @@
   in {
     packages = forSys (system: let
       pkgs = import nixpkgs { inherit system; };
-      genvim = import ./genvim { inherit system inputs; };
+      genvim = import ./genvim { inherit pkgs inputs; };
       HMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
       ModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);
       UtilDoc = pkgs.callPackage ./gen_docs/util.nix inputs;
@@ -34,7 +34,7 @@
       WebComponents = pkgs.callPackage ./components inputs;
 
       pandocCMD = pkgs.writeShellScript "pandocCMD" ''
-        export PATH="${lib.makeBinPath (with pkgs; [ coreutils pandoc ])}:$PATH"
+        export PATH="${lib.makeBinPath (with pkgs; [ coreutils pandoc haskellPackages.pandoc-sidenote ])}:$PATH"
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
         $(exit "$do_copy") && {

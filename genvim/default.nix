@@ -1,5 +1,5 @@
-{ system, inputs, ... }: let
-  inherit (inputs) nixCats nixpkgs;
+{ pkgs, inputs, ... }: let
+  inherit (inputs) nixCats;
   categoryDefinitions = { pkgs, settings, categories, name, ... }: {
     startupPlugins = {
       general = with pkgs.vimPlugins; [
@@ -36,5 +36,5 @@
   };
 in
 nixCats.utils.baseBuilder ./. {
-  inherit nixpkgs system;
+  inherit pkgs;
 } categoryDefinitions packageDefinitions "genvim"
