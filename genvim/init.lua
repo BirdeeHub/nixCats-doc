@@ -40,6 +40,7 @@ local builder = function(name)
             [[</div>]]
         }):insertHeaderLines({
             [[<meta name="viewport" content="width=device-width, initial-scale=1" />]],
+            [[<meta name="description" content="A Neovim package manager written in Nix for those who prefer to use a normal Neovim directory without missing out.">]],
             [[<script src="./vim-help.js"></script>]],
             [[<style>]],
             [[#nav-links a { color: #1a73e8; text-decoration: none; }]],
@@ -62,7 +63,7 @@ local builder = function(name)
             [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
             [[</div>]],
             [[<vim-help></vim-help>]],
-        }):finalize_content(false, {
+        }):finalize_content("en", false, {
             [ [['rtp']] ] = [[https://neovim.io/doc/user/options.html#'rtp']],
         })
 end

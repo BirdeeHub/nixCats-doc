@@ -7,7 +7,7 @@
 ---new_tag_root should be a string
 ---OR false for relative path
 ---OR nil to not fix tags
----@field finalize_content fun(self:htmlClass,new_tag_root?:string|false,extraHelp?:table<string, string>):string[]
+---@field finalize_content fun(self:htmlClass,lang:string,new_tag_root?:string|false,extraHelp?:table<string, string>):string[]
 
 ---HTML(filename):setBodyStyle(styleString)
 ---:insertHead(head):insertTail(tail)
@@ -46,6 +46,19 @@ local function getConstructor(doc_src)
             local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
             local htmlopts = vim.tbl_extend("force", opts or {}, { title = fname })
             return tohtml(win, htmlopts)
+        end
+        local function replaceHtmlTag(filelines, lang)
+            if #filelines == 0 then
+                return
+            end
+            for i, line in ipairs(filelines) do
+                if line:find("<html.*>") then
+                    table.remove(filelines, i)
+                    table.insert(filelines, i, [[<html lang="]] .. lang .. [[">]])
+                    return
+                end
+            end
+            my_assert(false, "error: no start of html")
         end
         local function getHeaderStart(filelines)
             if #filelines == 0 then
@@ -104,13 +117,15 @@ local function getConstructor(doc_src)
             end_body_index = getEndBdyInx(content),
             body_style = nil,
 
-            finalize_content = function(self, new_tag_root, extraHelp)
+            finalize_content = function(self, lang, new_tag_root, extraHelp)
+                local final_copy = vim.deepcopy(self.content)
+                replaceHtmlTag(final_copy, lang)
                 if new_tag_root then
-                    return fix_tags(vim.deepcopy(self.content), new_tag_root, extraHelp)
+                    return fix_tags(final_copy, new_tag_root, extraHelp)
                 elseif new_tag_root == false then
-                    return fix_tags(vim.deepcopy(self.content), false, extraHelp)
+                    return fix_tags(final_copy, false, extraHelp)
                 else
-                    return vim.deepcopy(self.content)
+                    return final_copy
                 end
             end,
             setBodyStyle = function(self, style)
