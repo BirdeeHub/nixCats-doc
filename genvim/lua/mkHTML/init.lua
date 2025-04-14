@@ -9,25 +9,19 @@
 ---OR nil to not fix tags
 ---@field finalize_content fun(self:htmlClass,lang:string,new_tag_root?:string|false,extraHelp?:table<string, string>):string[]
 
----HTML(filename):setBodyStyle(styleString)
----:insertHead(head):insertTail(tail)
----:insertManyHeads(headlist):insertManyTails(endlist)
----:get_content(new_tag_root)
----head and tail are at beginning and end of BODY
----@alias htmlCONSTRUCTOR fun(target_filename:string, opts?:html_opts):htmlClass
-
 ---@class html_opts
 ---@field number_lines boolean
 ---@field font string[]|string
 ---@field width integer
 ---@field range integer[]
 
+---@alias htmlCONSTRUCTOR fun(target_filename:string, opts?:html_opts):htmlClass
+
 local tohtml = require('tohtml').tohtml
 
 ---@param doc_src string
----@return fun(target_filename:string, opts?:html_opts):htmlClass
----@return fun(output_file:string,lines:string[]):boolean,string
-local function getConstructor(doc_src)
+---@return htmlCONSTRUCTOR
+return function(doc_src)
     local fix_tags = require("mkHTML.fix_tags")(doc_src .. "/tags")
 
     ---@param target_filename string
@@ -185,23 +179,5 @@ local function getConstructor(doc_src)
         })
     end
 
-    local writeToFile = function(output_file, lines)
-        local dirname = vim.fn.fnamemodify(output_file, ":p:h")
-        vim.fn.mkdir(dirname, "p")
-        local file = io.open(output_file, "w")
-        if file then
-            for _, line in ipairs(lines) do
-                file:write(line .. "\n")
-            end
-            file:close()
-            return true, "File written successfully to " .. output_file
-        else
-            return false, "Error: Unable to open file " .. output_file
-        end
-    end
-
-    ---@cast HTML htmlCONSTRUCTOR
-    return HTML, writeToFile
+    return HTML
 end
-
-return getConstructor

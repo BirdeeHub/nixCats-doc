@@ -27,7 +27,7 @@ local filetable = {
 local doc_out = vim.g.nixCats_doc_out
 local doc_src = vim.g.nixCats_doc_src
 
-local okHTML, HTML, writeToFile = pcall(require('mkHTML'),doc_src)
+local okHTML, HTML = pcall(require('mkHTML'), doc_src)
 ---@cast HTML htmlCONSTRUCTOR
 my_assert(okHTML, "unable to load HTML builder" .. vim.inspect(HTML))
 
@@ -66,6 +66,22 @@ local builder = function(name)
         }):finalize_content("en", false, {
             [ [['rtp']] ] = [[https://neovim.io/doc/user/options.html#'rtp']],
         })
+end
+
+---@type fun(output_file:string,lines:string[]):boolean,string
+local writeToFile = function(output_file, lines)
+    local dirname = vim.fn.fnamemodify(output_file, ":p:h")
+    vim.fn.mkdir(dirname, "p")
+    local file = io.open(output_file, "w")
+    if file then
+        for _, line in ipairs(lines) do
+            file:write(line .. "\n")
+        end
+        file:close()
+        return true, "File written successfully to " .. output_file
+    else
+        return false, "Error: Unable to open file " .. output_file
+    end
 end
 
 for _, name in ipairs(filetable) do
