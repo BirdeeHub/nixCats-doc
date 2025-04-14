@@ -1,18 +1,8 @@
 ---@class htmlClass
----NOTE: private fields, do not set directly!
----@field content string[]
----@field body_style string?
----@field filename string
----@field body_index number
----@field end_body_index number
----
 ---@field setBodyStyle fun(self:htmlClass, style:string):htmlClass
----@field fixBdyInx fun(self:htmlClass):htmlClass
----@field fixEndBdyInx fun(self:htmlClass):htmlClass
----@field insertHead fun(self:htmlClass, line:string):htmlClass
----@field insertTail fun(self:htmlClass, line:string):htmlClass
----@field insertManyHeads fun(self:htmlClass, lines:string[]):htmlClass
----@field insertManyTails fun(self:htmlClass, lines:string[]):htmlClass
+---@field insertHeaderLines fun(self:htmlClass, lines:string[]):htmlClass
+---@field insertBefore fun(self:htmlClass, lines:string[]):htmlClass
+---@field insertAfter fun(self:htmlClass, lines:string[]):htmlClass
 ---
 ---new_tag_root should be a string
 ---OR false for relative path
@@ -57,6 +47,28 @@ local function getConstructor(doc_src)
             local htmlopts = vim.tbl_extend("force", opts or {}, { title = fname })
             return tohtml(win, htmlopts)
         end
+        local function getHeaderStart(filelines)
+            if #filelines == 0 then
+                return nil
+            end
+            for i, line in ipairs(filelines) do
+                if line:find("<head.*>") then
+                    return i
+                end
+            end
+            my_assert(false, "error: no start of header")
+        end
+        local function getHeaderEnd(filelines)
+            if #filelines == 0 then
+                return nil
+            end
+            for i, line in ipairs(filelines) do
+                if line:find("</head>") then
+                    return i
+                end
+            end
+            my_assert(false, "error: no end of header")
+        end
         local function getBdyInx(filelines)
             if #filelines == 0 then
                 return nil
@@ -82,12 +94,16 @@ local function getConstructor(doc_src)
         local content = getHTMLlines(target_filename)
         my_assert(type(content) == "table" and content ~= {}, "error: empty content")
 
+        ---@type htmlClass
         return vim.deepcopy({
             filename = target_filename,
             content = content,
+            header_start = getHeaderStart(content),
+            header_end = getHeaderEnd(content),
             body_index = getBdyInx(content),
             end_body_index = getEndBdyInx(content),
             body_style = nil,
+
             finalize_content = function(self, new_tag_root, extraHelp)
                 if new_tag_root then
                     return fix_tags(vim.deepcopy(self.content), new_tag_root, extraHelp)
@@ -97,16 +113,6 @@ local function getConstructor(doc_src)
                     return vim.deepcopy(self.content)
                 end
             end,
-            fixBdyInx = function(self)
-                my_assert(type(self.content) == "table" and self.content ~= {}, "error: empty contents")
-                self.body_index = getBdyInx(self.content)
-                return self
-            end,
-            fixEndBdyInx = function(self)
-                my_assert(type(self.content) == "table" and self.content ~= {}, "error: empty contents")
-                self.end_body_index = getEndBdyInx(self.content)
-                return self
-            end,
             setBodyStyle = function(self, style)
                 my_assert(self.body_index > 0, "error: empty contents")
                 self.body_style = style
@@ -114,30 +120,50 @@ local function getConstructor(doc_src)
                 table.insert(self.content, self.body_index, [[<body style="]] .. style .. [[">]])
                 return self
             end,
-            insertHead = function(self, line)
+            insertHeaderLines = function(self, lines)
+                my_assert(#lines > 0, "error: empty contents")
+                my_assert(self.header_start > 0, "error: empty contents")
+                my_assert(self.header_end > 0, "error: empty contents")
                 my_assert(self.body_index > 0, "error: empty contents")
                 my_assert(self.end_body_index > 0, "error: empty contents")
-                table.insert(self.content, self.body_index + 1, line)
-                self.end_body_index = self.end_body_index + 1
-                return self
-            end,
-            insertManyHeads = function(self, lines)
-                my_assert(#lines > 0, "error: empty contents")
-                for i = #lines, 1, -1 do
-                    self:insertHead(lines[i])
+                if type(lines) == "table" then
+                    local insertat = self.header_end
+                    for i = #lines, 1, -1 do
+                        table.insert(self.content, insertat, lines[i])
+                        self.header_end = self.header_end + 1
+                        self.body_index = self.body_index + 1
+                        self.end_body_index = self.end_body_index + 1
+                    end
                 end
                 return self
             end,
-            insertTail = function(self, line)
+            insertBefore = function(self, lines)
+                my_assert(#lines > 0, "error: empty contents")
+                my_assert(self.header_start > 0, "error: empty contents")
+                my_assert(self.header_end > 0, "error: empty contents")
                 my_assert(self.body_index > 0, "error: empty contents")
                 my_assert(self.end_body_index > 0, "error: empty contents")
-                table.insert(self.content, self.end_body_index, line)
+                if type(lines) == "table" then
+                    local insertat = self.body_index + 1
+                    for i = #lines, 1, -1 do
+                        table.insert(self.content, insertat, lines[i])
+                        self.end_body_index = self.end_body_index + 1
+                    end
+                end
                 return self
             end,
-            insertManyTails = function(self, lines)
+            insertAfter = function(self, lines)
                 my_assert(#lines > 0, "error: empty contents")
-                for i = #lines, 1, -1 do
-                    self:insertTail(lines[i])
+                my_assert(self.header_start > 0, "error: empty contents")
+                my_assert(self.header_end > 0, "error: empty contents")
+                my_assert(self.body_index > 0, "error: empty contents")
+                my_assert(self.end_body_index > 0, "error: empty contents")
+                if type(lines) == "table" then
+                    local insertat = self.end_body_index
+                    for i = #lines, 1, -1 do
+                        table.insert(self.content, insertat, lines[i])
+                        self.end_body_index = self.end_body_index + 1
+                    end
                 end
                 return self
             end,

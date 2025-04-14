@@ -32,10 +32,15 @@ local okHTML, HTML, writeToFile = pcall(require('mkHTML'),doc_src)
 my_assert(okHTML, "unable to load HTML builder" .. vim.inspect(HTML))
 
 local builder = function(name)
-    return HTML(name, { number_lines = true })
-        :setBodyStyle([[display: flex; flex-direction: column]])
-        :insertManyHeads({
-            [[<div id="nav-links" style="text-align: center;">]],
+    return HTML(name, { number_lines = true }):insertBefore({
+            -- NOTE: flex-row was the default before we override things.
+            [[<div style="display: flex; flex-direction: row">]],
+        }):insertAfter({
+            -- NOTE: so we surround body content with a div with the same setting
+            [[</div>]]
+        }):insertHeaderLines({
+            [[<meta name="viewport" content="width=device-width, initial-scale=1" />]],
+            [[<script src="./vim-help.js"></script>]],
             [[<style>]],
             [[#nav-links a { color: #1a73e8; text-decoration: none; }]],
             [[#nav-links a:visited { color: #1a73e8; }]],
@@ -48,16 +53,15 @@ local builder = function(name)
             [[a.-label { text-decoration: none; }]],
             [[a.-label:hover { text-decoration: underline; }]],
             [[</style>]],
-            [[<script src="./vim-help.js"></script>]],
-            [[<vim-help></vim-help>]],
+        }):setBodyStyle(
+            [[display: flex; flex-direction: column]]
+        ):insertBefore({
+            [[<div id="nav-links" style="text-align: center;">]],
             [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
             [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
             [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
             [[</div>]],
-            -- NOTE: flex-row was the default before we overrode things.
-            [[<div style="display: flex; flex-direction: row">]],
-        }):insertManyTails({
-            [[</div>]],
+            [[<vim-help></vim-help>]],
         }):finalize_content(false, {
             [ [['rtp']] ] = [[https://neovim.io/doc/user/options.html#'rtp']],
         })
