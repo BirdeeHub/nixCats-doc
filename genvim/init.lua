@@ -58,7 +58,7 @@ local builder = function(name)
     }):setBodyStyle(
         [[display: flex; flex-direction: column]]
     ):insertBefore({
-        [[<div id="nav-links" style="text-align: center;">]],
+        [[<div id="nav-links" style="text-align: center; position: fixed; top: 0; width: 100%; z-index: 1000">]],
         [[<a href="./index.html" style="margin-right: 10px;">HOME</a>]],
         [[<a href="./TOC.html" style="margin-right: 10px;">TOC</a>]],
         [[<a href="https://github.com/BirdeeHub/nixCats-nvim">REPO</a>]],
