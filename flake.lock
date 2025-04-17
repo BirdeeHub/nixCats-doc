@@ -68,11 +68,11 @@
     },
     "nixCats": {
       "locked": {
-        "lastModified": 1744870229,
-        "narHash": "sha256-oM7MrQEN2ezszYeAn6sSy6FjIGUymTQjB4Sj7ySuZWQ=",
+        "lastModified": 1744870286,
+        "narHash": "sha256-ows0bZEID9HrNhqxhhmqWBUg1CGslaTMPcTZ0uqkZjU=",
         "owner": "BirdeeHub",
         "repo": "nixCats-nvim",
-        "rev": "fd1e0614d831694f1e81bdf1a8ed146f384699c2",
+        "rev": "7fa5c89323cd4563a03131f19efb83e691aa7299",
         "type": "github"
       },
       "original": {
