@@ -5,7 +5,8 @@
 ---@field insertAfter fun(self:htmlClass, lines:string[]):htmlClass
 ---
 ---new_tag_root should be a string
----OR falsey for relative path
+---OR false for relative path
+---OR nil to not fix tags
 ---@field finalize_content fun(self:htmlClass,lang:string,new_tag_root?:string|false,extraHelp?:table<string, string>):string[]
 
 ---@class html_opts
