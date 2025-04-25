@@ -28,7 +28,6 @@ end
 ---@field symbol string
 ---@field file string
 ---@field heading string
----@field path? string
 
 ---@type tag_entry[]
 local tags = {}
