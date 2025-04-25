@@ -48,9 +48,8 @@ return function (helptags_path)
         -- NOTE: dont forget to replact .txt with .html!
         table.insert(tags, {symbol = entry[1], file = string.sub(entry[2],1,-5) .. ".html", heading = entry[3]})
     end
-    -- NOTE: new_tag_root will be false for relative path
+    -- NOTE: new_tag_root will be falsey for relative path
     -- string for actual value if provided
-    -- will never be called with nil
     return function (html_lines, new_tag_root, extraHelp)
         for i, line in ipairs(html_lines) do
             for match in line:gmatch([[<span class="%-label"></span><span class="%-label">(.-)</span><span class="%-label"></span>]]) do
