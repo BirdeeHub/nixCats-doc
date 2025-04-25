@@ -37,7 +37,7 @@ return function(doc_src)
                 my_assert(ok, "error: unable to open " .. srcpath)
             end)
             local win = vim.api.nvim_open_win(buffer, true, { split = "above" })
-            local htmlopts = vim.tbl_extend("force", opts or {}, { title = fname })
+            local htmlopts = vim.tbl_extend("keep", opts or {}, { title = fname })
             return tohtml(win, htmlopts)
         end
         local function replaceHtmlTag(filelines, lang)
