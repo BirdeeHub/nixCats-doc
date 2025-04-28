@@ -1,9 +1,9 @@
 { nixCats
 , lua5_2
-, runCommandLua
+, runLuaCommand
 , ...
 }: let
-in runCommandLua "GenCatTemplateDoc" lua5_2.interpreter {
+in runLuaCommand "GenCatTemplateDoc" lua5_2.interpreter {
   passthru = {
     templates = builtins.mapAttrs (name: v: {
       inherit (v) description;

@@ -26,7 +26,7 @@
     forSys = lib.genAttrs lib.platforms.all;
   in {
     packages = forSys (system: let
-      pkgs = import nixpkgs { inherit system; overlays = [ inputs.shelua.overlays.runCommandLua ]; };
+      pkgs = import nixpkgs { inherit system; overlays = [ inputs.shelua.overlays.runLuaCommand ]; };
       genvim = import ./genvim { inherit pkgs inputs; };
       HMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
       ModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);

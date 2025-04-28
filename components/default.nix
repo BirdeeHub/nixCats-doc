@@ -2,7 +2,7 @@
   lib,
   system,
   nixCats,
-  runCommandLua,
+  runLuaCommand,
   nixdoc,
   lua5_2,
   nixosOptionsDoc,
@@ -21,7 +21,7 @@
       specialArgs = { inherit lib; };
     };
   in "${(nixosOptionsDoc { inherit (eval'd) options; }).optionsJSON}/share/doc/nixos/options.json";
-in runCommandLua "gen_web_component" (lua5_2.withPackages (ps: with ps; [ cjson ])).interpreter {
+in runLuaCommand "gen_web_component" (lua5_2.withPackages (ps: with ps; [ cjson ])).interpreter {
   nativeBuildInputs = [ nixdoc.packages.${system}.default ];
   passthru = {
     templates = lib.pipe nixCats.utils.templates [
