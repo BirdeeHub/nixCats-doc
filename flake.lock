@@ -68,11 +68,11 @@
     },
     "n2l": {
       "locked": {
-        "lastModified": 1745877165,
-        "narHash": "sha256-NUEGGrjhtlv0AadpryHUtPkeeLrC0aILTK6xoaczIvA=",
+        "lastModified": 1745878523,
+        "narHash": "sha256-hzDMLJNk5e7J5sh/e2Tkhco0A048Tu06cLa3QY3sH+E=",
         "owner": "BirdeeHub",
         "repo": "nixToLua",
-        "rev": "df0acaffd0a7db362b76bd0c28c08960ce271b02",
+        "rev": "42cc3d283baf6c66ec71fd97eea9dde1ca6b0b67",
         "type": "github"
       },
       "original": {
@@ -180,11 +180,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1745877857,
-        "narHash": "sha256-NJF8tBFWrwh+vMkIwDGK6IB/x66d2gLIWNXaZxSV8do=",
+        "lastModified": 1745878538,
+        "narHash": "sha256-ql4yuK+9xD9uX4QJAzsOsidhoJw+x6cP7BuNFGUGTuY=",
         "owner": "BirdeeHub",
         "repo": "shelua",
-        "rev": "0fde7dc6258fb80f1bda7c521e56a64500a562c5",
+        "rev": "bcc116858b0406ac20bfb438e1492921c3a2171b",
         "type": "github"
       },
       "original": {
