@@ -10,6 +10,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixCats.url = "github:BirdeeHub/nixCats-nvim";
+    shelua.url = "github:BirdeeHub/shelua";
     mkdncss = {
       url = "github:sindresorhus/github-markdown-css";
       flake = false;
@@ -25,7 +26,7 @@
     forSys = lib.genAttrs lib.platforms.all;
   in {
     packages = forSys (system: let
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs { inherit system; overlays = [ inputs.shelua.overlays.runCommandLua ]; };
       genvim = import ./genvim { inherit pkgs inputs; };
       HMdoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = true; } // inputs);
       ModDoc = pkgs.callPackage ./gen_docs/mod.nix ({ isHomeManager = false; } // inputs);

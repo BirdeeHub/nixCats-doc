@@ -66,6 +66,21 @@
         "type": "github"
       }
     },
+    "n2l": {
+      "locked": {
+        "lastModified": 1745841364,
+        "narHash": "sha256-g5+L5Fkl7/XELtpRLVH/8qTLdK0qrKNw7XU3byNl2Lg=",
+        "owner": "BirdeeHub",
+        "repo": "nixToLua",
+        "rev": "fc11212abfca2ca8ac2e9d478ae45f6b13e0a1cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "nixToLua",
+        "type": "github"
+      }
+    },
     "nixCats": {
       "locked": {
         "lastModified": 1745808494,
@@ -133,13 +148,49 @@
         "type": "github"
       }
     },
+    "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1745377448,
+        "narHash": "sha256-jhZDfXVKdD7TSEGgzFJQvEEZ2K65UMiqW5YJ2aIqxMA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "507b63021ada5fee621b6ca371c4fca9ca46f52c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "mkdncss": "mkdncss",
         "mkdncss2": "mkdncss2",
         "nixCats": "nixCats",
         "nixdoc": "nixdoc",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "shelua": "shelua"
+      }
+    },
+    "shelua": {
+      "inputs": {
+        "n2l": "n2l",
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1745848400,
+        "narHash": "sha256-RirgfepTJoIAvifM9v26yxFI+Ly0/6m1GjSmx8GI7YQ=",
+        "owner": "BirdeeHub",
+        "repo": "shelua",
+        "rev": "dd7d4d16fd17b2fc720f5ded48dfaeeb2e381b2b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "BirdeeHub",
+        "repo": "shelua",
+        "type": "github"
       }
     },
     "systems": {
