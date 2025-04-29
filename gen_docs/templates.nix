@@ -21,7 +21,7 @@ local function toMD(name,description)
   return res
 end
 
-local templates_nix = drv.passthru.templates
+local templates_nix = drv.templates
 local order = {
     "default",
     "luaUtils",

@@ -47,7 +47,7 @@ in runLuaCommand "gen_web_component" (lua5_2.withPackages (ps: with ps; [ cjson 
 
   local cjson = require('cjson.safe')
 
-  local result = drv.passthru.templates
+  local result = drv.templates
   for k, v in pairs(cjson.decode(tags_json)) do
     result[k] = v .. "#" .. k
   end
