@@ -180,11 +180,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1745879241,
-        "narHash": "sha256-X1CW9fLRNAIqRGYImrFyTrXNtT+WgpeWD/rpoIPg6t4=",
+        "lastModified": 1745884728,
+        "narHash": "sha256-JVZltKQzsAVy8f4bMbw3103lQbKpVB6NM4zVJ2xmn4E=",
         "owner": "BirdeeHub",
         "repo": "shelua",
-        "rev": "cb9d72282110635471ffcacaaa6d3b3e8cf89c96",
+        "rev": "6eab56c5bae22bcd290feaa39b0d7a1863a7e3b6",
         "type": "github"
       },
       "original": {
