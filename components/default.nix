@@ -31,7 +31,7 @@ in runLuaCommand "gen_web_component" (lua5_2.withPackages (ps: with ps; [ cjson 
     ];
   };
 } /*lua*/ ''
-  sh().escape_args = true
+  sh.escape_args = true
   sh.mkdir("-p", out)
   local utils_json = tostring(sh.nixdoc {
     j = true,
