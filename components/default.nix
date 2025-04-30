@@ -31,6 +31,7 @@ in runLuaCommand "gen_web_component" (lua5_2.withPackages (ps: with ps; [ cjson 
     ];
   };
 } /*lua*/ ''
+  sh().escape_args = true
   sh.mkdir("-p", out)
   local utils_json = tostring(sh.nixdoc {
     j = true,
@@ -42,7 +43,7 @@ in runLuaCommand "gen_web_component" (lua5_2.withPackages (ps: with ps; [ cjson 
   local hm_json = os.read_file "${(optionsDoc true)}"
   local nixos_json = os.read_file "${(optionsDoc false)}"
   local tags_json = "{\n" .. tostring(
-    sh.awk([['{printf "  "} NR > 1 {printf ", "} {sub(/\.txt$/, ".html", $2); print "\"" $1 "\": \"./" $2 "\""}']], "${nixCats}/nixCatsHelp/tags")
+    sh.awk([[{printf "  "} NR > 1 {printf ", "} {sub(/\.txt$/, ".html", $2); print "\"" $1 "\": \"./" $2 "\""}]], "${nixCats}/nixCatsHelp/tags")
   ) .. "\n}"
 
   local cjson = require('cjson.safe')
