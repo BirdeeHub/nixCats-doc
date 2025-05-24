@@ -38,7 +38,7 @@
         export PATH="${lib.makeBinPath (with pkgs; [ coreutils pandoc haskellPackages.pandoc-sidenote ])}:$PATH"
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
-        $(exit "$do_copy") && {
+        ((do_copy)) && {
           mkdir -p $nix_out/css && \
           cp -f ${mkdncss}/github-markdown-dark.css $nix_out/css/github-markdown-dark.css
         } || true
@@ -54,7 +54,7 @@
         export PATH="${lib.makeBinPath (with pkgs; [ coreutils pandoc haskellPackages.pandoc-sidenote ])}:$PATH"
         do_copy=$1 nix_out=$2
         pan_in=$3 pan_out=$4 pan_title=$5
-        $(exit "$do_copy") && {
+        ((do_copy)) && {
           mkdir -p $nix_out/css && \
           cp -f ${mkdncss2}/public/css/* $nix_out/css
         } || true
@@ -74,15 +74,15 @@
 
       docsite = pkgs.runCommandNoCC "genNixCatsDocs" {} ''
         export HOME=$(mktemp -d)
-        do_copy=0
+        do_copy=1
         pandocGen() {
           ${pandocCMD} "$do_copy" "$out" "$@"
-          do_copy=1
+          do_copy=0
         }
-        do_copy_2=0
+        do_copy_2=1
         pandocGen2() {
           ${pandocCMD2} "$do_copy_2" "$out" "$@"
-          do_copy=1
+          do_copy_2=0
         }
 
         # use nvim headless and the config to generate html from nvim docs
