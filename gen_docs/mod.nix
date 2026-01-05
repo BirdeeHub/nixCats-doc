@@ -2,7 +2,7 @@
 , nixCats
 , lib
 , nixosOptionsDoc
-, runCommandNoCC
+, runCommand
 , ...
 }: let
   eval'd = lib.evalModules {
@@ -17,7 +17,7 @@
   };
   optionsDoc = nixosOptionsDoc { inherit (eval'd) options; };
 in
-runCommandNoCC (if isHomeManager then "GenCatHMdoc" else "GenCatModDoc") {} ''
+runCommand (if isHomeManager then "GenCatHMdoc" else "GenCatModDoc") {} ''
   cat ${optionsDoc.optionsCommonMark} > $out
   echo >> $out
   cat ${./modulefootnote.md} >> $out

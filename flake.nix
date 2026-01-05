@@ -72,7 +72,7 @@
           "$(realpath "$pan_in")"
       '';
 
-      docsite = pkgs.runCommandNoCC "genNixCatsDocs" {} ''
+      docsite = pkgs.runCommand "genNixCatsDocs" {} ''
         export HOME=$(mktemp -d)
         do_copy=1
         pandocGen() {
@@ -108,7 +108,7 @@
       '';
 
       # maybe one day I can get this to work
-      tovimdoc = pkgs.runCommandNoCC "tovimdoc" {} ''
+      tovimdoc = pkgs.runCommand "tovimdoc" {} ''
         pandoccmd () {
           ${pkgs.panvimdoc}/bin/panvimdoc --toc false --dedup-subheadings true --project-name "$2" --input-file "$1"
         }
