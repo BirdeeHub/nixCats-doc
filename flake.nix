@@ -19,7 +19,6 @@
       url = "github:jez/pandoc-markdown-css-theme";
       flake = false;
     };
-    nixdoc.url = "github:nix-community/nixdoc";
   };
   outputs = { nixpkgs, nixCats, mkdncss, mkdncss2, ... }@inputs: let
     inherit (nixpkgs) lib;

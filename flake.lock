@@ -1,39 +1,5 @@
 {
   "nodes": {
-    "flake-compat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1732722421,
-        "narHash": "sha256-HRJ/18p+WoXpWJkcdsk9St5ZiukCqSDgbOGFa8Okehg=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "9ed2ac151eada2306ca8c418ebd97807bb08f6ac",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
-    "flake-utils": {
-      "inputs": {
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "mkdncss": {
       "flake": false,
       "locked": {
@@ -66,21 +32,6 @@
         "type": "github"
       }
     },
-    "n2l": {
-      "locked": {
-        "lastModified": 1748756411,
-        "narHash": "sha256-jmfRRsxCVV+/2KnDVrMG/RBKFOARDpSrYICqQ6vnSjw=",
-        "owner": "BirdeeHub",
-        "repo": "nixToLua",
-        "rev": "a701038ccfe76833f678e3c643a2b0f4291c1cea",
-        "type": "github"
-      },
-      "original": {
-        "owner": "BirdeeHub",
-        "repo": "nixToLua",
-        "type": "github"
-      }
-    },
     "nixCats": {
       "locked": {
         "lastModified": 1777273601,
@@ -96,43 +47,7 @@
         "type": "github"
       }
     },
-    "nixdoc": {
-      "inputs": {
-        "flake-compat": "flake-compat",
-        "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1763500960,
-        "narHash": "sha256-fHt7zaWBx/E+tz6H5iVWndX+UzGN/4GwChxsan21NK4=",
-        "owner": "nix-community",
-        "repo": "nixdoc",
-        "rev": "9ae442575adc58afcfc0c077d971bb376605ed48",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "nixdoc",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1733024928,
-        "narHash": "sha256-n/DOfpKH1vkukuBnach91QBQId2dr5tkE7/7UrkV2zw=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "2c27ab2e60502d1ebb7cf38909de38663f762a79",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
       "locked": {
         "lastModified": 1774610258,
         "narHash": "sha256-HaThtroVD9wRdx7KQk0B75JmFcXlMUoEdDFNOMOlsOs=",
@@ -148,13 +63,13 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_2": {
       "locked": {
-        "lastModified": 1773840656,
-        "narHash": "sha256-9tpvMGFteZnd3gRQZFlRCohVpqooygFuy9yjuyRL2C0=",
+        "lastModified": 1777826146,
+        "narHash": "sha256-wQ/iN5Zp5VIa3ebBibijPnLyKhor+xEbDy4d0goa9Zs=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "9cf7092bdd603554bd8b63c216e8943cf9b12512",
+        "rev": "73c703c22422b8951895a960959dbbaca7296492",
         "type": "github"
       },
       "original": {
@@ -169,42 +84,25 @@
         "mkdncss": "mkdncss",
         "mkdncss2": "mkdncss2",
         "nixCats": "nixCats",
-        "nixdoc": "nixdoc",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "shelua": "shelua"
       }
     },
     "shelua": {
       "inputs": {
-        "n2l": "n2l",
-        "nixpkgs": "nixpkgs_3"
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1774333127,
-        "narHash": "sha256-tK4YKTnaCk8yx+yO9jHF4RpJYObJ9wIJJcocA5xBHSw=",
+        "lastModified": 1778013738,
+        "narHash": "sha256-gUru7e+piDwtLXa3gog4fXSLT16t0Qj1hvn563qQSOE=",
         "owner": "BirdeeHub",
         "repo": "shelua",
-        "rev": "b29ec71bbef342e3eb83803240309a2024e81d24",
+        "rev": "6af3ed45e1622049aa996f269ac875e52582de2d",
         "type": "github"
       },
       "original": {
         "owner": "BirdeeHub",
         "repo": "shelua",
-        "type": "github"
-      }
-    },
-    "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
         "type": "github"
       }
     }

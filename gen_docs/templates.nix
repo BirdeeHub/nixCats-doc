@@ -4,7 +4,7 @@
 , ...
 }: let
 in runLuaCommand "GenCatTemplateDoc" lua5_2.interpreter {
-  passthru = {
+  passthru.info = {
     templates = builtins.mapAttrs (name: v: {
       inherit (v) description;
       inherit name;
